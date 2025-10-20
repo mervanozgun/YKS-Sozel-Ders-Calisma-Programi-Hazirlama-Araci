@@ -1,0 +1,2615 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AYT Sözel Ders Çalışma Programı Aracı</title>
+    <style>
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', serif;
+        }
+        
+        body {
+            background: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #4a6fa5, #6b8cbc);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        .settings-panel {
+            flex: 1;
+            min-width: 300px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .program-panel {
+            flex: 2;
+            min-width: 500px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #4a6fa5;
+            border-bottom: 2px solid #6b8cbc;
+            padding-bottom: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .subjects-container {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+        
+        .subject-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .subject-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .topics-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 5px;
+            margin-left: 20px;
+        }
+        
+        .topic-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+        
+        input[type="number"], input[type="time"], select, input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .days-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .day-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .custom-duration {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .custom-duration input {
+            flex: 1;
+        }
+        
+        .custom-duration select {
+            width: auto;
+        }
+        
+        button {
+            background: #ff7e5f;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #ff6b4a;
+        }
+        
+        .pdf-button {
+            background: #2ecc71;
+        }
+        
+        .pdf-button:hover {
+            background: #27ae60;
+        }
+        
+        .jpg-button {
+            background: #3498db;
+        }
+        
+        .jpg-button:hover {
+            background: #2980b9;
+        }
+        
+        .print-button {
+            background: #9b59b6;
+        }
+        
+        .print-button:hover {
+            background: #8e44ad;
+        }
+        
+        .bw-print-button {
+            background: #2c3e50;
+        }
+        
+        .bw-print-button:hover {
+            background: #1a252f;
+        }
+        
+        .reset-button {
+            background: #95a5a6;
+        }
+        
+        .reset-button:hover {
+            background: #7f8c8d;
+        }
+        
+        .program-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            background: white;
+        }
+        
+        .program-table th {
+            background: #4a6fa5;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .program-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        .program-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .time-slot {
+            font-weight: bold;
+            color: #4a6fa5;
+            white-space: nowrap;
+        }
+        
+        .date-display {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: normal;
+            display: block;
+            margin-top: 2px;
+        }
+        
+        .subject {
+            background: #6b8cbc;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 2px 0;
+            font-size: 0.85rem;
+        }
+        
+        .numeric-subject {
+            background: #e74c3c;
+        }
+        
+        .verbal-subject {
+            background: #27ae60;
+        }
+        
+        .topic {
+            background: #e0e0e0;
+            color: #2c3e50;
+            padding: 2px 6px;
+            border-radius: 3px;
+            display: inline-block;
+            margin: 1px 0;
+            font-size: 0.75rem;
+        }
+        
+        .question-solving {
+            background: #9b59b6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 2px 0;
+            font-size: 0.85rem;
+        }
+        
+        .break {
+            background: #f39c12;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 2px 0;
+        }
+        
+        .empty-slot {
+            color: #999;
+            font-style: italic;
+        }
+        
+        .program-notes {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f4fc;
+            border-radius: 8px;
+            border-left: 4px solid #4a6fa5;
+        }
+        
+        .program-notes h3 {
+            margin-bottom: 10px;
+            color: #4a6fa5;
+        }
+        
+        .program-notes ul {
+            padding-left: 20px;
+        }
+        
+        .program-notes li {
+            margin-bottom: 8px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #4a6fa5;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .success-message {
+            color: #27ae60;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* İlerleme çubuğu stilleri */
+        .progress-container {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .progress-title {
+            font-weight: bold;
+            color: #4a6fa5;
+        }
+        
+        .progress-stats {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a6fa5, #6b8cbc);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .progress-percentage {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #4a6fa5;
+        }
+        
+        .subject-progress {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        /* Program ilerleme raporu stilleri */
+        .program-progress-report {
+            margin: 20px 0;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            border: 2px solid #e74c3c;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .program-progress-report h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 8px;
+        }
+        
+        .program-progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .progress-stat-item {
+            text-align: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .progress-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4a6fa5;
+        }
+        
+        .progress-stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .program-progress-details {
+            margin-top: 15px;
+        }
+        
+        .subject-progress-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .subject-progress-name {
+            font-weight: bold;
+        }
+        
+        .subject-progress-bar {
+            flex: 1;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+        
+        .subject-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a6fa5, #6b8cbc);
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+        
+        .subject-progress-stats {
+            font-size: 0.85rem;
+            color: #666;
+            min-width: 80px;
+            text-align: right;
+        }
+        
+        .program-progress-warning {
+            margin-top: 15px;
+            padding: 12px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            color: #856404;
+        }
+        
+        .program-progress-success {
+            margin-top: 15px;
+            padding: 12px;
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 6px;
+            color: #0c5460;
+        }
+        
+        /* Haftalık Konu Ayarları için ek CSS */
+        .weekly-topics-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .weekly-subject-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .weekly-subject-name {
+            font-weight: bold;
+            flex: 1;
+        }
+        
+        .weekly-subject-input {
+            width: 80px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .weekly-summary {
+            margin-top: 15px;
+            padding: 10px;
+            background: #e8f4fc;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .capacity-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            border-left: 4px solid #ffc107;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .settings-panel, .program-panel {
+                min-width: 100%;
+            }
+            
+            .program-table {
+                font-size: 0.8rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .custom-duration {
+                flex-direction: column;
+            }
+            
+            .custom-duration select {
+                width: 100%;
+            }
+            
+            .progress-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .progress-stats {
+                margin-top: 5px;
+            }
+            
+            .program-progress-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .subject-progress-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .subject-progress-bar {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            .subject-progress-stats {
+                align-self: flex-end;
+            }
+            
+            .weekly-subject-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .weekly-subject-input {
+                width: 100%;
+                margin-top: 5px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .program-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .days-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Yazdırma stilleri */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .program-panel, .program-panel * {
+                visibility: visible;
+            }
+            .program-panel {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: white;
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+            }
+            .program-table {
+                font-size: 14px;
+                width: 100%;
+            }
+            .program-table th {
+                background: #f0f0f0 !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact;
+                border: 1px solid #000;
+                font-weight: bold;
+            }
+            .program-table td {
+                border: 1px solid #000;
+                padding: 8px;
+            }
+            .program-table tr {
+                background: white !important;
+            }
+            .time-slot {
+                color: black !important;
+                font-weight: bold;
+            }
+            .subject, .numeric-subject, .verbal-subject, .question-solving, .break {
+                background: #f0f0f0 !important;
+                color: black !important;
+                border: 1px solid #000;
+                font-weight: bold;
+            }
+            .topic {
+                background: white !important;
+                color: black !important;
+                border: 1px solid #666;
+            }
+            .empty-slot {
+                color: #666 !important;
+            }
+            button, .settings-panel, .program-notes, .progress-container, .program-progress-report {
+                display: none !important;
+            }
+            .week-container {
+                page-break-after: always;
+                margin-bottom: 20px;
+            }
+            .week-container:last-child {
+                page-break-after: avoid;
+            }
+            .section-title {
+                color: black !important;
+                border-bottom: 2px solid #000;
+                font-size: 18px;
+            }
+            h4 {
+                color: black !important;
+                background: #f0f0f0 !important;
+                border: 1px solid #000;
+                font-size: 16px;
+            }
+            .date-display {
+                color: black !important;
+                font-size: 12px;
+            }
+        }
+
+        /* Siyah-Beyaz Yazdırma için özel stiller */
+        .bw-print-styles {
+            display: none;
+        }
+
+        @media print and (monochrome) {
+            .bw-print-styles {
+                display: block;
+            }
+        }
+</style>
+    <!-- jsPDF kütüphanesi -->
+    
+    <!-- html2canvas kütüphanesi (JPG dönüşümü için) -->
+    
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AYT Sözel Ders Çalışma Programı Aracı</h1>
+            <p class="subtitle">Kişiselleştirilmiş AYT Sözel çalışma programınızı oluşturun</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="settings-panel">
+                <h2 class="section-title">Program Ayarları</h2>
+                
+                <div class="form-group">
+                    <label for="start-date">Program Başlangıç Tarihi:</label>
+                    <input type="date" id="start-date" name="start-date">
+                    <small style="color: #666; display: block; margin-top: 5px;">Programın başlayacağı tarihi seçin</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Program Süresi:</label>
+                    <div class="custom-duration">
+                        <input type="number" id="duration-value" min="1" max="100" value="4" style="flex: 1;">
+                        <select id="duration-unit">
+                            <option value="weeks">Hafta</option>
+                            <option value="months">Ay</option>
+                        </select>
+                    </div>
+                    <small style="color: #666; display: block; margin-top: 5px;">1-100 hafta veya 1-24 ay arası değer girebilirsiniz</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Çalışmak İstediğiniz Dersleri Seçin:</label>
+                    
+                    <!-- İlerleme çubuğu -->
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <div class="progress-title">Konu Seçim İlerlemesi</div>
+                            <div class="progress-stats" id="progress-stats">0/0 konu seçildi</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                            <div class="progress-percentage" id="progress-percentage">0%</div>
+                        </div>
+                        <div class="subject-progress" id="subject-progress">
+                            Hiç ders seçilmedi
+                        </div>
+                    </div>
+                    
+                    <div class="subjects-container" id="subjects-container">
+                        <!-- Dersler buraya eklenecek -->
+                    </div>
+                </div>
+                
+                <!-- YENİ: Haftalık Konu Sayısı Ayarları -->
+                <div class="form-group weekly-topics-panel">
+                    <label>Haftalık Konu Sayısı Ayarları:</label>
+                    <small style="color: #666; display: block; margin-top: 5px; margin-bottom: 10px;">Her ders için haftada kaç konu işlemek istediğinizi belirleyin (Varsayılan: 1)</small>
+                    
+                    <div id="capacity-info" class="capacity-info">
+                        <!-- Kapasite bilgisi buraya eklenecek -->
+                    </div>
+                    
+                    <div id="weekly-topics-container">
+                        <!-- Haftalık konu ayarları buraya eklenecek -->
+                    </div>
+                    <div class="weekly-summary" id="weekly-summary">
+                        Toplam haftalık konu sayısı: 0
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Çalışma Günlerinizi Seçin:</label>
+                    <div class="days-selector">
+                        <div class="day-checkbox">
+                            <input type="checkbox" id="day-pazartesi" name="days" value="Pazartesi" checked>
+                            <label for="day-pazartesi">Pazartesi</label>
+                        </div>
+                        <div class="day-checkbox">
+                            <input type="checkbox" id="day-sali" name="days" value="Salı" checked>
+                            <label for="day-sali">Salı</label>
+                        </div>
+                        <div class="day-checkbox">
+                            <input type="checkbox" id="day-carsamba" name="days" value="Çarşamba" checked>
+                            <label for="day-carsamba">Çarşamba</label>
+                        </div>
+                        <div class="day-checkbox">
+                            <input type="checkbox" id="day-persembe" name="days" value="Perşembe" checked>
+                            <label for="day-persembe">Perşembe</label>
+                        </div>
+                        <div class="day-checkbox">
+                            <input type="checkbox" id="day-cuma" name="days" value="Cuma" checked>
+                            <label for="day-cuma">Cuma</label>
+                        </div>
+                        <div class="day-checkbox">
+                            <input type="checkbox" id="day-cumartesi" name="days" value="Cumartesi">
+                            <label for="day-cumartesi">Cumartesi</label>
+                        </div>
+                        <div class="day-checkbox">
+                            <input type="checkbox" id="day-pazar" name="days" value="Pazar">
+                            <label for="day-pazar">Pazar</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="daily-hours">Günlük Çalışma Süresi (saat):</label>
+                    <input type="number" id="daily-hours" min="1" max="22" value="4">
+                </div>
+                
+                <div class="form-group">
+                    <label for="start-time">Günlük Başlangıç Saati:</label>
+                    <input type="time" id="start-time" value="18:00">
+                </div>
+                
+                <button onclick="generateProgram()">Programı Oluştur</button>
+                <button onclick="downloadPDF()" class="pdf-button">PDF Olarak İndir</button>
+                <button onclick="downloadJPG()" class="jpg-button">JPG Olarak İndir</button>
+                <button onclick="printProgram()" class="print-button">Yazdır</button>
+                <button onclick="printBWProgram()" class="bw-print-button">Siyah-Beyaz Yazdır</button>
+                <button onclick="resetForm()" class="reset-button">İçeriği Temizle</button>
+                <div id="loading" class="loading">PDF hazırlanıyor, lütfen bekleyin...</div>
+                <div id="error-message" class="error-message"></div>
+                <div id="success-message" class="success-message"></div>
+            </div>
+            
+            <div class="program-panel">
+                <h2 class="section-title">AYT Sözel Çalışma Programınız</h2>
+                <div id="program-table-container">
+                    <p>Program ayarlarınızı yapıp "Programı Oluştur" butonuna tıklayın.</p>
+                </div>
+                
+                <div class="program-notes">
+                    <h3>Program Tavsiyeleri</h3>
+                    <ul>
+                        <li><span style="color: #e74c3c;">🔴 Sayısal dersler</span> ve <span style="color: #27ae60;">🟢 Sözel dersler</span> karışık şekilde dağıtılır</li>
+                        <li>Her hafta en az 4 farklı ders çalışılır</li>
+                        <li>Her konu mantıklı sırayla işlenir</li>
+                        <li>Her konudan sonra mutlaka soru çözümü yapın</li>
+                        <li>Sayısal ve sözel dersler dönüşümlü olarak çalışılır</li>
+                        <li>Her ders oturumundan sonra mola verin</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+        // TYT ve AYT Dersleri ve Konuları
+        const tytSubjects = {
+            "TYT Türkçe": ["Sözcükte Anlam Özellikleri",  "Sözcükler Arası Anlam İlişkileri", "Söz Öbeklerinde Anlam", "Sözcükte Anlam - Sözel Mantık",  "Cümlede Anlam İlişkileri", "Cümle Yorumlama", "Cümle Oluşturma - Tamamlama", "Anlatımın Özellikleri", "Cümleler Arası Anlam İlişkileri", "Paragrafın Anlam Yönü", "Paragrafın Yapı Yönü", "Paragrafın Anlatım Yönü", "Paragrafta Akışı Bozan Cümleler", "Paragraf Tamamlama", "Paragrafı İkiye Bölme", "Paragrafta Yardımcı Düşünce", "Paragraf Çözümleme", "Çok Parçalı Sorular", "İsim (Ad)", "Zamir (Adıl)", "Sıfat (Ön Ad)", "Zarf (Belirteç)", "Edat (İlgeç)", "Bağlaç", "Ünlem", "Fiiller (Eylemler)", "Fiil Çatısı", "Fiillerde Kip - Kişi - Zaman", "Ek-Fiil (Ek-Eylem)", "Birleşik Zamanlı Fiiller", "Türkçenin Ses Özellikleri", "Büyük Ünlü Uyumu", "Küçük Ünlü Uyumu", "Ünsüz Benzeşmesi", "Ünsüz Yumuşaması", "Ses Olayları", "Yazım (İmla) Kuralları", "Noktalama İşaretleri", "Temel Ögeler", "Yardımcı Ögeler", "Ara Söz", "Cümlenin Ögeleri ile İlgili Uyarılar", "Yüklemin Türüne Göre Cümleler", "Yüklemin Yerine Göre Cümleler", "Anlamına Göre Cümleler", "Yapısına Göre Cümleler", "Anlamsal Bozukluklar", "Yapısal Bozukluklar"],
+            "TYT Matematik": ["Temel Kavramlar (Sayılar)", "Rakam ve Sayı", "Sayı Doğrusu", "Tek ve Çift Sayılar", "Pozitif ve Negatif Sayılar", "Ardışık Sayılar", "Asal Sayılar", "Aralarında Asal Sayılar", "Sayı Basamakları ve Taban Aritmetiği", "Basamak Kavramı ve Çözümleme", "Taban Aritmetiği", "Taban Çevirme", "Bölme ve Bölünebilme Kuralları", "Bölme İşlemi, Bölünebilme", "Bölünebilme Kuralları (2, 3, 4, 5, 6, 7, 8, 9, 10, 11)", "Asal Çarpanlara Ayırma", "Obeb (EBOB) ve Okek (EKOK)", "Rasyonel Sayılar ve Ondalık Sayılar", "Rasyonel Sayılar ve Özellikleri", "Ondalık Sayılar", "Devirli Ondalık Sayılar", "Basit Eşitsizlikler ve Sıralama", "Gerçek Sayı Aralıkları", "Basit Eşitsizliklerin Özellikleri", "Sıralama Problemleri", "Mutlak Değer", "Mutlak Değer Kavramı ve Özellikleri", "Mutlak Değerli Denklemler", "Mutlak Değerli Eşitsizlikler", "Üslü Sayılar", "Üslü İfadeler ve Özellikleri", "Üslü Denklemler ve Sıralama", "Köklü Sayılar", "Köklü İfadeler ve Özellikleri", "Köklü Sayılarda Sıralama", "İç İçe Kökler", "Köklü Sayılarda Dört İşlem", "Çarpanlara Ayırma ve Özdeşlikler", "Ortak Çarpan Parantezine Alma", "Gruplandırma", "Önemli Özdeşlikler (İki Kare Farkı, Tam Kare, İki Küp Toplamı/Farkı vb.)", "Oran ve Orantı", "Orantı Kavramı ve Özellikleri (Doğru, Ters, Bileşik Orantı)", "Aritmetik, Geometrik ve Harmonik Ortalama", "Denklem Çözme", "Birinci Dereceden Bir Bilinmeyenli Denklemler", "Birinci Dereceden İki Bilinmeyenli Denklem Sistemleri", "Problemler", "Sayı ve Kesir Problemleri", "Yaş Problemleri", "İşçi ve Havuz Problemleri", "Hareket (Hız) Problemleri", "Yüzde, Kâr-Zarar ve Faiz Problemleri", "Karışım Problemleri", "Grafik Problemleri", "Sayısal Mantık ve Günlük Hayat Problemleri", "Kümeler", "Küme Kavramı, Gösterimleri ve Temel Tanımlar", "Alt Küme ve Özellikleri", "Kümelerde İşlemler (Birleşim, Kesişim, Fark, Tümleme)", "Küme Problemleri ve Venn Şeması", "İki Kümenin Kartezyen Çarpımı", "Fonksiyonlar", "Fonksiyon Kavramı ve Tanımı", "Fonksiyon Türleri (Birebir, Örten, İçine, Birim, Sabit, Doğrusal Fonksiyon)", "Fonksiyonlarda Dört İşlem", "Bileşke Fonksiyon", "Ters Fonksiyon", "Permütasyon, Kombinasyon, Binom ve Olasılık", "Sayma Yöntemleri (Toplama ve Çarpma Yoluyla Sayma)", "Faktöriyel Kavramı", "Permütasyon (Sıralama, Diziliş)", "Kombinasyon (Seçme, Gruplama)", "Binom Açılımı", "Olasılık Kavramı ve Temel Olasılık Kuralları", "Koşullu Olasılık (TYT düzeyinde temel seviye)", "Veri, İstatistik ve Grafikler", "Merkezi Eğilim ve Yayılım Ölçüleri (Ortalama, Medyan, Mod, Açıklık)", "Verilerin Grafikle Gösterilimi (Sütun, Çizgi, Daire Grafiği)", "2. Dereceden Denklemler", "İkinci Dereceden Bir Bilinmeyenli Denklemler ve Çözüm Kümesi", "Kökler ile Katsayılar Arasındaki İlişkiler", "Karmaşık Sayılara Giriş (Temel Seviye)", "Polinomlar", "Polinom Kavramı ve Temel Tanımlar", "Polinomlarda Dört İşlem", "Polinomlarda Kalan Bulma Teoremleri", "Mantık", "Önermeler ve Bileşik Önermeler (Ve, Veya, Ya da, İse, Ancak ve Ancak)", "Totoloji ve Çelişki", "Açık Önermeler ve Niceleyiciler (Her, Bazı)"],
+            "TYT Geometri": ["Doğruda Açı","Üçgende Açı - I","Üçgende Açı - II","Özel Üçgenler - I","Özel Üçgenler - II","Özel Üçgenler - III","Dik Üçgende Trigonometri","Açı Kenar Bağıntıları","Açıortay","Kenarortay","Üçgende Benzerlik - I","Üçgende Benzerlik - II","Üçgende Benzerlik - III","Üçgende Alan","Dörtgenler","Yamuk - I","Yamuk - II","Yamuk - III","Yamuk - IV","Paralelkenar - I","Paralelkenar - II","Paralelkenar - III","Eşkenar Dörtgen","Dikdörtgen - I","Dikdörtgen - II","Dikdörtgen - III","Kare","Deltoid","Çokgenler - I","Çokgenler - II","Çemberde Açı","Çemberde Uzunluk","Dairenin Çevresi ve Alanı - I","Dairenin Çevresi ve Alanı - II","Noktanın Analitik İncelenmesi","Doğrunun Analitik İncelenmesi - I","Doğrunun Analitik İncelenmesi - II","Katı Cisimler - I","Katı Cisimler - II","Katı Cisimler - III"],
+            "TYT Fizik": ["Fi̇zi̇ği̇n Uğraş Alani Ve Fi̇zi̇ği̇n Alt Alanlari","Fi̇zi̇ksel Ni̇celi̇kleri̇n Siniflandirilmasi","Hareket Ve Hareketi̇n Temel Kavramlari","Düzgün Doğrusal Hareket","Kuvvet","Newton Kanunlari","Sürtünme Kuvveti̇","Eği̇k Düzlem Ve Eylemsi̇zli̇k","İş Ve Güç","Enerji̇","Potansi̇yel Enerji̇","Sürtünme Ve Enerji̇ Korunumu","Maddeni̇n Ortak Özelli̇kleri̇","özkütle","Dayaniklilik Ve Akişkanlar","Katilarin Basinci","Durgun Sivilarin Basinci","Bi̇leşi̇k Kaplar, açik Hava Ve Gaz Basinci","Sivilarin Kaldirma Kuvveti̇","Isi, Sicaklik Ve Isi Alişveri̇şi̇","Hâl Deği̇şi̇mi̇","Genleşme","Elektri̇klenme","Elektri̇ksel Kuvvet Ve Elektri̇ksel Alan","Akim Şi̇ddeti̇ Ve Ohm Kanunu","Elektri̇k Devreleri̇","üretecleri̇n Bağlanmasi Ve Elektri̇k Enerji̇si̇","Lambalar","Manyeti̇zma","Gölge, Yansima Ve Aydinlanma","Düzlem Aynada Görüntü","Düzlem Aynada Görüş Alani","Küresel Aynalar","Kirilma Ve Renk","Mercekler","Dalga Hareketi̇","Yay Dalgalari","Su Dalgalari","Su Dalgalarinda Yansima Ve Kirilma","Deprem Ve Ses Dalgalari"],
+            "TYT Kimya": ["Simyadan Kimyaya","Kimya Bilimi","Kimyanın Sembolik Dili","Güvenliğimiz ve Kimya","Atom Modelleri","Atom ve Yapısı","Katman Elektron Dizilimi","Periyodik Sistem","Elementleri Tanıyalım","Periyodik Özellikler","Kimyasal Türler ve Etkileşimler","Güçlü Etkileşimler","Bileşiklerin Adlandırılması","Zayıf Etkileşimler","Fiziksel ve Kimyasal Değişimler","Maddenin Fiziksel Hâlleri","Katılar","Sıvılar","Gazlar","Hâl Değişim Grafikleri","Su ve Hayat","Çevre Kimyası","Kimyanın Temel Kanunları","Mol Kavramı","Kimyasal Tepkime ve Denklemi","Tepkime Türleri","Kimyasal Hesaplamalar","Karışımların Sınıflandırılması","Çözünme Olayı ve Etkileşimler","Derişim Türleri","Koligatif Özellikler","Ayırma ve Saflaştırma Teknikleri","Asitler ve Bazlar","pH Kavramı ve İndikatörler","Asitler ve Bazların Tepkimeleri","Hayatımızda Asitler ve Bazlar","Tuzlar","Yaygın Günlük Hayat Kimyasalları","Geri Dönüşüm","Gıdalar"],
+            "TYT Biyoloji": ["Bilimsel Yöntem","Canlıların Ortak Özellikleri - I","Canlıların Ortak Özellikleri - II","İnorganik Bileşikler","Karbonhidratlar","Yağlar (Lipitler)","Proteinler","Vitaminler","Enzimler","Nükleik Asitler","ATP, Organik Maddelerin Karşılaştırılması","Hücrenin Yapısı","Hücre Zarı ve Madde Geçişleri - I","Hücre Zarı ve Madde Geçişleri - II","Organeller - I","Organeller - II","Çekirdek, Hücre Organizasyonu","Sınıflandırma Çeşitleri - I","Sınıflandırma Çesitleri - II","Arkebakteriler","Bakteriler","Protistler","Mantarlar","Bitkiler","Hayvanlar","Virüsler, Canlı Alemlerinin Biyolojik Sürece ve Ekonomiye Katkıları","Güncel Çevre Sorunları","Doğal Kaynaklar, Biyolojik Çeşitlilik","Hücre Döngüsü, Mitoz Bölünme","Eşeysiz Üreme","Mayoz Bölünme","Eşeyli Üreme","Genel Bilgiler, Mendel'in İlkeleri","Tam Baskınlık","Eş Baskınlık, Çok Alellik","Cinsiyete Bağlı Kalıtım","Soy Ağaçları, Genetik Çeşitliliğin Nedenleri","Ekosistem Ekolojisi","Ekosistemde Enerji Akışı","Madde Döngüleri"],
+            "TYT Tarih": ["Tari̇h Bi̇li̇mi̇ Ve Tari̇hi̇n Özelli̇kleri̇", "Zaman Bi̇lgi̇si̇ - Takvi̇mler Ve Tari̇he Yardimci Bi̇li̇mler", "Tari̇h Öncesi̇ Devi̇rler Ve İlk Uygarliklar - Anadolu Uygarliklari Ve Di̇ğer Medeni̇yetler", "Göçler - Coğrafya Ve İkli̇mi̇n Etki̇leri̇, Si̇yasi̇ Gücün Ve Hukuk Si̇stemi̇ni̇n Kaynaklari", "Orta Çağ'da Devlet Ve Toplum - Ekonomi̇ - Askeri̇ Organi̇zasyonlar Ve Hukuk", "Türkleri̇n Tari̇h Sahnesi̇ne Çikişi - İlk Ve Orta Çağlarda İç Asya'daki̇ Türk Devletleri̇ni̇n Güç Ve Yöneti̇m Anlayişi", "Asya Hun Devleti̇ - Kavi̇mler Göçü Ve Avrupa Hun Devleti̇ - Di̇ğer Türk Devletleri̇ Ve Topluluklari", "İslam Öncesi̇ Arap Yarimadasi - Hazreti̇ Mohammed Ve Dört Hali̇fe Dönemi̇", "Emevi̇ler - Endülüs Emevi̇leri̇ Ve Abbaşi̇ler", "Türkleri̇n İslamlaşmasi - Karahanlilar - Gazneller - Büyük Selçuklular", "Türki̇ye Selçuklu Devleti̇-i̇lk Türk Beyli̇kleri̇ - Haçli Seferleri̇ Ve Moğol Tehdi̇di̇", "Osmanli Devleti̇'ni̇n Kuruluş Yillari Ve Beyli̇kten Devlete Geçi̇ş", "Devletlesme Süreci̇nde Savaşçilar Ve Askeri̇ Yapi", "Devletlesme Süreci̇nde Osmanli Medeni̇yeti̇", "İstanbul'un Fethi̇ - İslam Dünyasi Li̇derli̇ği̇", "Osmanli'nin Gücü Ve Strateji̇k Raki̇pleri̇ - Coğrafi̇ Keşi̇fleri̇n Etki̇leri̇", "Sultan Ve Osmanli Merkez Teşki̇lati", "Klasi̇k Çağ'da Osmanli Toplum Düzeni̇", "1595 - 1700 Yillari Arasindaki̇ Si̇yasi̇ Geli̇şmeler - Avrupa'da Di̇n Savaşlarindan Modern Devlete - Feti̇hlerden Savunmaya", "Avrupa'da Deği̇şi̇m Çaği - Osmanli Devleti̇'nde Deği̇şi̇m", "Osmanli Devleti̇nde İsyanlar Ve Düzeni̇ Koruma Çabalari", "Xviii - Xx. Yüzyil Si̇yasi Geli̇şmeleri̇ (1774 - 1914), Osmanli - Rus Rekabeti̇ (1768 - 1914)", "İhti̇laller Çaği", "Osmanli Devleti̇nde Modern Orduya Geçi̇ş - Xix. Yüzyilda Sosyal Hayattaki̇ Deği̇şi̇mler - Osmanli'da Demokrati̇klesme Hareketleri̇", "El Emeği̇nden Maki̇nelesmeye - Osmanli'da Sanayi̇lesme Ve Ekonomi̇yi̇ Düzeltme Çabalari", "Ulus Devlete Gi̇den Süreçte Nüfus - Modern Hayattaki̇ Sosyal Deği̇şi̇m", "Mustafa Kemal'i̇n Hayati (1881 - 1919)", "Xx. Yüzyil Başlarinda Osmanli Devleti̇", "I. Dünya Savaşi'nda (1914 - 1918) Görülen Geli̇şmeler Ve Savaşin Sonuçlari - Mondros Mütarekesi̇ Ve Sonraşindaki̇ Geli̇şmeler", "Mi̇lli̇ Mücadele'de Örgütlenme Dönemi̇ Ve Amasya Genelgesi̇", "Erzurum, Si̇vas Ve Di̇ğer Kongreler Dönemi̇, Amasya Görüşmeleri̇ Ve Mi̇sak-i Mi̇lli̇", "İlk Tbmm Dönemi̇ (1920 - 1923) Ve Sevr Antlasmasi - Kurtuluş Savaşi'nda Cepheler - Sakarya Meydan Muharebesi̇'nden Lozan Antlasmasi'na", "Atatürkçü Düşünce Si̇stemi̇ Ve Atatürk İlkeleri̇", "Türk İnkilabi Ve Si̇yasi Alanda Yapilan İnkilaplar", "Eği̇ti̇m, Toplum Ve Ekonomi̇ Alaninda Yapilan İnkilaplar", "İki̇ Savaş Arasindaki̇ Dönemde Türki̇ye Ve Dünya", "Ii. Dünya Savaşi Süreci̇nde Türki̇ye Ve Dünya", "Ii. Dünya Savaşi Sonrasinda Türki̇ye Ve Dünya", "Toplumsal Devri̇m Çağinda Dünya Ve Türki̇ye", "Xxi. Yüzyilin Eşi̇ği̇nde Türki̇ye Ve Dünya"
+
+],
+            "TYT Coğrafya": ["İnsan - Doğa Ve Coğrafya", "Dünyanin Şekli̇ Ve Sonuçlari", "Dünyanin Hareketleri̇", "Coğrafi Koordi̇nat Si̇stemi̇ Ve Konum", "Hari̇talarda Temel Kavramlar", "Hari̇talarda Uzunluk Ve Alan Hesaplamalari, Bi̇lgi̇leri̇n Hari̇taya Aktarilmasi, Hari̇taciliğin Tari̇hsel Geli̇şi̇mi̇", "Hari̇talarda Yeryüzü Şeki̇lleri̇ni̇ Gösterme Yöntemleri̇", "Atmosfer, Hava Durumu Ve İkli̇m", "İkli̇m Elemanlari: Sicaklik", "İkli̇m Elemanlari: Basinç", "İkli̇m Elemanlari: Rüzgârlar", "İkli̇m Elemanlari: Nem Ve Yağiş", "Yeryüzündeki̇ İkli̇m Ti̇pleri̇", "Türki̇ye De İkli̇m", "Dünyanin Tektoni̇k Oluşumu Ve Jeoloji̇k Zamanlar", "İç Kuvvetler", "Kayaçlar Ve Türki̇ye De İç Kuvvetler", "Diş Kuvvetler: Akarsularin Oluşturduğu Yeryüzü Şeki̇lleri̇", "Diş Kuvvetler: Rüzgârlarin Oluşturduğu Yeryüzü Şeki̇lleri̇", "Diş Kuvvetler: Karsti̇k Arazi̇lerde Oluşan Ve Buzullarin Oluşturduğu Yeryüzü Şeki̇lleri̇", "Di̇ş Kuvvetler: Dalga Ve Akintilarin Oluşturduğu Yeryüzü Şeki̇lleri̇, Kiyi Ti̇pleri̇", "Türki̇ye'de Diş Kuvvetler Ve Başlica Yeryüzü Şeki̇lleri̇", "Dünya'da Su Kaynaklari", "Türki̇ye'de Su Kaynaklari", "Dünya'da Topraklar", "Türki̇ye'de Topraklar Ve Topraklarin Kullanimi", "Dünya'da Bi̇tki̇ler", "Türki̇ye'de Bi̇tki̇ler Ve Bi̇tki̇lerden Yararlanma", "Yerleşmeleri̇n Geli̇şi̇mi̇, Yerleşme Dokulari̇ Ve Ti̇pleri̇, Türki̇ye'de Yerleşmeler", "Nüfusun Özelli̇kleri̇, Önemi̇, Dünya'da Nüfusun Tari̇hsel Geli̇şi̇mi̇ Ve Dağilişi", "Nüfus Pi̇rami̇tleri̇", "Türki̇ye'de Nüfus", "Göç Ve Göçleri̇n Nedenleri̇", "Türki̇ye'de Göçler", "Ekonomi̇k Faali̇yetler", "Bölge Ve Bölge Türleri̇, Bölge Sinirlari", "Dünya'da Ulaşim Ve Ulaşim Si̇stemleri̇ (Kara, Demi̇r, Hava Yollari Ve Boru Hatlari)", "Ulaşim Si̇stemleri̇ (Deni̇z Yollari)", "Afetleri̇n Genel Özelli̇kleri̇, Dağilişi Ve Afetlerden Korumma Yollari", "Türki̇ye'de Doğal Afetler"],
+            "TYT Felsefe": ["Felsefenin Konusu ve Önemi", "Felsefenin Konusu ve Önemi-Felsefenin tanım", "Felsefenin Konusu ve Önemi-Felsefenin doğuşu ve tarihsel gelişimi", "Felsefenin Konusu ve Önemi-Felsefenin diğer bilimlerle ilişkisi", "Felsefenin Konusu ve Önemi-Felsefi düşünmenin özellikleri", "Bilgi Felsefesi (Epistemoloji)-Bilginin tanımı ve kaynağı", "Bilgi Felsefesi (Epistemoloji)-Doğru bilginin imkânı", "Bilgi Felsefesi (Epistemoloji)-Bilgi türleri (gündelik, bilimsel, felsefi, sanat bilgisi, dinî bilgi)", "Bilgi Felsefesi (Epistemoloji)-Bilgi anlayışları-Rasyonalizm", "Bilgi Felsefesi (Epistemoloji)-Bilgi anlayışları-Empirizm", "Bilgi Felsefesi (Epistemoloji)-Bilgi anlayışları-Kritisizm", "Bilgi Felsefesi (Epistemoloji)-Bilgi anlayışları-Pozitivizm", "Bilgi Felsefesi (Epistemoloji)-Bilgi anlayışları-Pragmatizm", "Bilgi Felsefesi (Epistemoloji)-Bilgi anlayışları-Entüisyonizm", "Bilgi Felsefesi (Epistemoloji)-Bilgi anlayışları-Fenomenoloji", "Bilgi Felsefesi (Epistemoloji)-Bilgi anlayışları-Analitik felsefe", "Varlık Felsefesi (Ontoloji)-Varlık kavramı", "Varlık Felsefesi (Ontoloji)-Varlık–yokluk ilişkisi", "Varlık Felsefesi (Ontoloji)-Varlığın türleri-Maddi varlık", "Varlık Felsefesi (Ontoloji)-Varlığın türleri-Tinsel varlık", "Varlık Felsefesi (Ontoloji)-Varlığın türleri-Nesnel–öznel varlık", "Varlık Felsefesi (Ontoloji)-Varlık anlayışları–Realizm", "Varlık Felsefesi (Ontoloji)-Varlık anlayışları–İdealizm", "Varlık Felsefese (Ontoloji)-Varlık anlayışları–Materyalizm", "Varlık Felsefesi (Ontoloji)-Varlık anlayışları–Dualizm", "Varlık Felsefesi (Ontoloji)-Varlık anlayışları–Monizm", "Varlık Felsefesi (Ontoloji)-Varlık anlayışları–Nihilizm", "Ahlak Felsefesi (Etik)-Ahlak ve etik arasındaki fark", "Ahlak Felsefesi (Etik)-İyi, kötü, doğru, yanlış kavramları", "Ahlak Felsefesi (Etik)-Özgürlük ve sorumluluk ilişkisi", "Ahlak Felsefesi (Etik)-Etik yaklaşımlar-Hedonizm", "Ahlak Felsefesi (Etik)-Etik yaklaşımlar-Epikürcülük", "Ahlak Felsefesi (Etik)-Etik yaklaşımlar-Stoacılık", "Ahlak Felsefesi (Etik)-Etik yaklaşımlar-Utilitarizm (Faydacılık)", "Ahlak Felsefesi (Etik)-Etik yaklaşımlar-Kant'ın ödev ahlakı", "Ahlak Felsefesi (Etik)-Etik yaklaşımlar-Nietzsche'nin değer anlayışı", "Sanat Felsefesi (Estetik)-Sanatın tanımı ve amacı", "Sanat Felsefesi (Estetik)-Güzel kavramı", "Sanat Felsefese (Estetik)-Sanat eserinin değeri", "Sanat Felsefesi (Estetik)-Estetik yaklaşımlar-Mimesis (taklit)", "Sanat Felsefesi (Estetik)-Estetik yaklaşımlar-Yaratıcılık", "Sanat Felsefesi (Estetik)-Estetik yaklaşımlar-Duygusal dışavurum", "Din Felsefesi-Din felsefesinin konusu", "Din Felsefesi-Tanrı'nın varlığına ilişkin görüşler-Teizm", "Din Felsefesi-Tanrı'nın varlığına ilişkin görüşler-Ateizm", "Din Felsefesi-Tanrı'nın varlığına ilişkin görüşler-Agnostisizm", "Din Felsefesi-Tanrı'nın varlığına ilişkin görüşler-Deizm", "Din Felsefesi-Tanrı'nın varlığına ilişkin görüşler-Din–akıl ilişkisi", "Siyaset Felsefesi-Siyaset felsefesinin konusu", "Siyaset Felsefesi-Devletin ortaya çıkışı", "Siyaset Felsefesi-Devlet biçimleri (monarşi, demokrasi, aristokrasi vb.)", "Siyaset Felsefesi-Özgürlük, eşitlık, adalet kavramları", "Siyaset Felsefesi-Toplum sözleşmesi görüşleri (Hobbes, Locke, Rousseau)", "Bilim Felsefesi-Bilimin tanımı ve özellikleri", "Bilim Felsefesi-Bilimin yöntemleri (tümdengelim, tümevarım, deney–gözlem)", "Bilim Felsefesi-Bilim–teknoloji ilişkisi", "Bilim Felsefesi-Bilimin değeri ve sınırları", "Bilim Felsefesi-Bilim anlayışları-Pozitivizm", "Bilim Felsefesi-Bilim anlayışları-Falsifikasyon (Karl Popper)", "Bilim Felsefesi-Bilim anlayışları-Paradigma (Thomas Kuhn)", "20. Yüzyıl Felsefesi"],
+            "TYT Din Kültürü": ["Bilgi ve İnanç", "İslam ve İbadetler", "Ahlak ve Değerler", "Allah İnancı", "Gençlik ve Değerler", "Güncel Dini Meseleler", "Hz. Muhammed (S.A.V.)", "Vahiy ve Akıl", "İslam Düşüncesinde Tasavvuf", "Yaşayan Dinler"],
+            "AYT Edebiyat": [
+                "Güzel Sanatlar ve Edebiyat",
+                "Sözlü Anlatım Türleri",
+                "Gazete - Dergi Çevresinde Oluşan Metinler",
+                "Kişisel Hayatı Konu Alan Metinler",
+                "Göstermeye Bağlı Edebî Metinler",
+                "Anlatmaya Bağlı Metinler",
+                "Coşku ve Heyecanı Dile Getiren Metinler (Şiir)",
+                "Edebî Sanatlar (Söz Sanatları)",
+                "İslamiyet Öncesi Türk Edebiyatı",
+                "Geçiş Dönemi",
+                "Divan Edebiyatı",
+                "Divan Edebiyatı Nazım Şekilleri ve Nazım Türleri",
+                "Divan Edebiyatında Nesir, Nesir Türleri ve Akımlar",
+                "Divan Edebiyatı Sanatçıları",
+                "Halk Edebiyatı",
+                "Tanzimat Edebiyatı",
+                "Servetifünun Edebiyatı",
+                "Servetifünun Dönemi Bağımsız Sanatçılar",
+                "Fecriati Topluluğu",
+                "Millî Edebiyat",
+                "Cumhuriyet Dönemi Edebiyatında Saf (Öz) Şiir",
+                "1920 - 1960 Yılları Arasında Toplumcu Şiir",
+                "Millî Edebiyat Zevk ve Anlayışını Ön Plana Çıkaranlar",
+                "Garipçiler (Birinci Yeniciler)",
+                "Garip Dışında Yeniliği Sürdüren Şiir - Maviciler",
+                "İkinci Yeniciler",
+                "Dinî Değerleri, Geleneğe Bağlılığı ve Metafizik Anlayışı Öne Çıkaran Şiir",
+                "Hisarcılar",
+                "1960 Sonrası Toplumcu Eğilimleri Yansıtan Şiir",
+                "1980 Sonrası Türk Şiiri",
+                "Cumhuriyet Dönemi Halk Şiiri",
+                "Millî Duyarlığı Yansıtan Roman ve Hikâyeler",
+                "Toplumcu Gerçekçi Roman ve Hikâyeler",
+                "Bireyin İç Dünyasını Esas Alan Roman ve Hikâyeler",
+                "Modernizmi ve Postmodernizmi Esas Alan Roman ve Hikâyeler",
+                "Cumhuriyet Dönemi'nde Tiyatro",
+                "Cumhuriyet Dönemi'nde Öğretici Metinler",
+                "Edebî Akımlar",
+                "Dünya Edebiyatı",
+                "Türkiye Dışındaki Çağdaş Türk Edebiyatı"
+            ],
+            "AYT Coğrafya": [
+                "Biyoçeşitlilik",
+                "Ekosistemlerin Unsurları, Enerji Akışı ve Madde Döngüleri",
+                "Su Ekosistemlerinin İşleyişi",
+                "Ekstrem Doğa Olayları",
+                "Doğa ve Değişim ile Küresel İklim Değişimi",
+                "Nüfus Politikaları ve Türkiye'nin Nüfus Projeksiyonları",
+                "Şehirlerin Gelişimi, Fonksiyonları ve Etki Alanları",
+                "Türkiye'de Yerleşmeler",
+                "Üretim, Dağıtım ve Tüketimi Etkileyen Faktörler",
+                "Doğal Kaynaklar, Ekonomik ve Türkiye'de Doğal Kaynak - Ekonomi İlişkisi",
+                "Geçmişte Geleceğe Şehir ve Ekonomi",
+                "Türkiye'nin Ekonomi Politikaları ve Türkiye Ekonomisinin Sektörel Dağılımı",
+                "Türkiye'de Tarım",
+                "Türkiye'de Ormancılık, Hayvancılık ve Balıkçılık",
+                "Türkiye'de Madenler ve Enerji Kaynakları",
+                "Türkiye'de Sanayi",
+                "Türkiye'nin İşlevsel Bölgeleri ve Kalkınma Projeleri",
+                "Türkiye'de Ulaşım",
+                "Türkiye'de Ticaret",
+                "Türkiye'de Turizm",
+                "İlk Kültür Merkezleri, Kültür Bölgelerinin Oluşumu ve Dağılışı",
+                "Türk Kültürü ve Anadolu'nun Kültür Özellikleri",
+                "Uluslararası Ticaret",
+                "Uluslararası Turizm",
+                "Sanayileşme Süreci: Almanya ve Tarım - Ekonomi İlişkisi",
+                "Uluslararası Örgütler",
+                "Kıtaların, Okyanusların Önemindeki Değişimler ve Ülkelerin Konumunun Küresel - Bölgesel Etkileri",
+                "Türkiye'nin Jeopolitik Konumu ve Türk Kültürü Havzası",
+                "Teknolojik Gelişmelerin Kültürel, Ekonomik Etkileri ve Ülkelerin Gelişmişlik Düzeyleri",
+                "Ülkelerin Bölgesel ve Küresel Ölçekte Doğal Kaynak Potansiyeli ve Çatışma Bölgeleri",
+                "Çevre Sorunları ve Türleri",
+                "Madenler ve Enerji Kaynaklarına Ait Kullanımın Çevresel Etkileri",
+                "Doğal Kaynak ve Arazi Kullanımının Çevresel Etkileri",
+                "Küresel Çevre Sorunları",
+                "Doğal Kaynakların Sürdürülebilir Kullanımı",
+                "Doğal Çevrenin Sınırlılığı, Doğal Kaynakların Bilinçsiz Kullanımı ve Çevre Politikaları",
+                "Ülkelerin Çevre Sorunlarına Yaklaşımları, Çevresel Örgütler ve Ortak Doğal - Kültürel Mirasın Korunması"
+            ],
+            "AYT Tarih": [
+                "Tarih Bilimi ve Tarihin Özellikleri",
+                "Zaman Bilgisi - Tarihe Yardımcı Bilimler",
+                "İnsanlık Tarihinde Yazı Öncesi ve Sonrası Dönemler - İlk Çağ Medeniyetleri",
+                "Coğrafya ve İklimin Etkileri, Siyasi Gücün ve Hukuk Sisteminin Kaynakları",
+                "Orta Çağ'da Devlet ve Toplum - Ekonomi - Askeri Organizasyonlar ve Hukuk",
+                "Türklerin Tarih Sahnesine Çıkışları - İlk ve Orta Çağlardaki Türk Devletlerinin Güç ve Yönetim Anlayışları",
+                "Asya Hun Devleti - Kavimler Göçü ve Avrupa Hun Devleti - Diğer Türk Devletleri ve Toplulukları",
+                "İslam Öncesi Arap Yarımadası - Hazreti Muhammed ve Dört Halife Dönemi",
+                "Emeviler - Abbasiler ve Endülüs Emevileri",
+                "Türklerin İslamlaşmaları ve İlk Türk İslam Devletleri",
+                "Oğuz Türkleri ve Büyük Selçuklular",
+                "Anadolu Selçuklu Devleti - İlk Türk Beylikleri - Haçlı Seferleri ve Moğol Tehdidi",
+                "Osmanlı Devleti'nin Kuruluş Yılları ve Beylikten Devlete Geçiş",
+                "Devletleşme Sürecinde Askerî Yapı",
+                "Devletleşme Sürecinde Osmanlı Medeniyeti",
+                "İstanbul'un Fethi - İslam Dünyası Liderliği",
+                "Osmanlı'nın Gücü ve Stratejik Rakipleri - Coğrafi Keşiflerin Etkileri",
+                "Osmanlı Merkez Teşkilatı",
+                "Klasik Dönem'de Osmanlı Toplumu",
+                "1595 - 1700 Yılları Arasındaki Siyasi Gelişmeler - Fetihlerden Savunmaya",
+                "Avrupa'da Değişim Çağı - Osmanlı Devleti'nde Değişim",
+                "Osmanlı Devleti'nde İsyanlar ve Düzeni Koruma Çabaları",
+                "İhtilaller Çağı - Osmanlı Devleti'nde Modern Orduya Geçiş",
+                "XVIII - XX. Yüzyıl Siyasi Gelişmeleri (1774 - 1914), Osmanlı - Rus Rekabeti (1768 - 1914)",
+                "XIX. Yüzyılda Sosyal Hayattaki Değişimler - Osmanlı Devleti'nde Demokratikleşme Hareketleri ve Darbeler",
+                "Osmanlı'da Sanayileşme ve Ekonomiyi Düzeltme Çabaları",
+                "Ulus Devlete Giden Süreçte Nüfus - Modern Hayattaki Sosyal Değişim",
+                "Mustafa Kemal'in Hayatı (1881 - 1919)",
+                "XX. Yüzyıl Başlarında Osmanlı Devleti",
+                "I. Dünya Savaşı - Mondros Mütarekesi ve Sonrasındaki Gelişmeler",
+                "Millî Mücadele'de Örgütlenme Dönemi ve Amasya Genelgesi",
+                "Erzurum, Sivas ve Diğer Kongreler Dönemi, Amasya Görüşmeleri ve Misak-ı Millî",
+                "Kurtuluş Savaşı'nda Cepheler - Sakarya Meydan Muharebesi'nden Lozan Antlaşması'na",
+                "Atatürkçü Düşünce Sistemi ve Atatürk İlkeleri",
+                "Türk İnkilabı ve Siyasi Alanda Yapılan İnkılaplar",
+                "Hukuk, Eğitim, Toplum ve Ekonomi Alanında Yapılan İnkılaplar",
+                "Atatürk Dönemi Türk Dış Politikası ve Atatürk Sonrası Türkiye",
+                "II. Dünya Savaşı'nın Nedenleri, Yayılması",
+                "II. Dünya Savaşı Yıllarında Türkiye ve Savaşın Sonuçları",
+                "II. Dünya Savaşı Sonrası Türkiye - İki Kutuplu Dünya ve Türkiye - 1950'li Yıllarda Türkiye",
+                "1960 Sonrası Dünyadaki Gelişmeler ve Olayların Türk Dış Politikasına Etkileri - 1960 Sonrası Türkiye'de Yaşanan Siyasi, Ekonomik ve Sosyal Gelişmeler",
+                "1990 Sonrası Türkiye ve Dünyadaki Gelişmeler"
+            ],
+            "AYT Felsefe": [
+                "Felsefenin Anlamı",
+                "Felsefi Düşüncenin Ortaya Çıkışı ve Özellikleri - Felsefe Sorusu Nedir?",
+                "Felsefenin İnsan ve Toplum Hayatı Üzerindeki Rolü",
+                "Düşünme ve Akıl Yürütmeye İlişkin Kavramlar",
+                "Düşünme ve Dil İlişkisi - Felsefi Bir Görüşü veya Argümanı Sorgulama",
+                "Varlık Felsefesinin Konusu ve Problemleri",
+                "Varlık Felsefesi Alanındaki Çağdaş Yaklaşımlar",
+                "Evrende Amaçlılık ve Düzenlilik - Varlık Türlerinin Sınıflandırılması - Bir Konunun Varlık Felsefesi Açısından Değerlendirilmesi",
+                "Bilgi Felsefesinin Konusu ve Bilginin İmkânı Problemi",
+                "Bilginin Kaynağı ile İlgili Görüşler",
+                "Bilginin Sınırları - Doğru Bilginin Ölçütü - Doğruluk ve Gerçeklik - Bilginin Değeri ve Güvenirliği",
+                "Bilim Felsefesinin Konusu ve Problemleri",
+                "Bilimin Değeri - Bilim Felsefe İlişkisi - Bilim ve Hayat İlişkisi",
+                "Ahlak Felsefesinin Konusu ve Problemleri - İyi ve Kötünün Ölçütü",
+                "Özgürlük ve Sorumluluk",
+                "Evrensel Bir Ahlak Yasasını Kabul Eden Görüşler ve Filozoflar",
+                "Evrensel Bir Ahlak Yasasını Reddeden Görüşler ve Filozoflar",
+                "İyilik ve Mutluluk İlişkisi - Özgürlük, Sorumluluk ve Kural İlişkisi",
+                "Din Felsefesinin Konusu ve Soruları - Tanrı'nın Varlığı ile İlgili Görüşler",
+                "Din Felsefesinin Soruları - Teoloji ve Din Felsefesi - Felsefe, Bilim ve Din Açısından Ben Kimim?",
+                "Siyaset Felsefesinin Konusu ve Problemleri - Hak, Adalet, Özgürlük - İktidarın Kaynağı",
+                "Ideal Devlet Düzenine Yönelik Görüşler - Ütopya",
+                "Egemenlik Sorunu - Toplumsal Sorunlara Felsefi Bakış",
+                "Sanat Felsefesinin Konusu ve Problemleri - Güzellik - Sanat Nedir?",
+                "Sanat Kuramları - Sanat Eserinin Özellikleri - Sanat ve Duyarlılık - Şehir, İnsan ve Sanat",
+                "İlk Medeniyetlerin Felsefenin Doğuşuna Etkisi - Anadolu'da Yaşamış Filozoflar",
+                "İlk Neden(Arkhe) ve Değişim Problemi",
+                "Sofistler ile Sokrates'in Bilgi ve Değer Anlayışları",
+                "Platon'un Varlık, Bilgi ve Değer Anlayışı",
+                "Aristoteles'in Varlık, Bilgi ve Değer Anlayışı",
+                "Görüş Analizi: Konfüçyüs, Sokrates, Platon ve Aristoteles",
+                "MS 2.Yüzyıl - MS 15.Yüzyıl Felsefesinin Ortaya Çıkışı - Hristiyan Felsefesinin Özellikleri ve Problemleri",
+                "İslam Felsefesinin Özellikleri ve Problemleri",
+                "İnanç - Akıl İlişkisi - Çeviri Faaliyetleri",
+                "Görüş Analizi (Augustinus, Fârâbî, İbn Sîna, Gâzâlî ve İbn Rûşd) - Tasavvuf Düşüncesi",
+                "15. Yüzyıl - 17. Yüzyıl Felsefesinin Ortaya Çıkışı",
+                "15. Yüzyıl - 17. Yüzyıl Felsefesinde Öne Çıkan Görüşler",
+                "Bilimsel Çalışmaların 15. Yüzyıl - 17. Yüzyıl Felsefesine Etkisi",
+                "Görüş Analizi: R. Descartes, B. Spinoza ve T. Hobbes",
+                "18. Yüzyıl - 19. Yüzyıl Felsefesinin Ortaya Çıkışı - Genel Özellikleri - Dil ve Edebiatla İlişkisi",
+                "18. Yüzyıl - 19. Yüzyıl Felsefesinin Öne Çıkan Problemleri - 1",
+                "18. Yüzyıl - 19. Yüzyıl Felsefesinin Öne Çıkan Problemleri - 2",
+                "Görüş Analizi: J. Locke, I. Kant ve F. Hegel",
+                "20. Yüzyıl Felsefesinin Ortaya Çıkışı",
+                "20. Yüzyıl Felsefesinin Öne Çıkan Özellikleri ve Temel Problemleri - 1",
+                "20. Yüzyıl Felsefesinin Öne Çıkan Özellikleri ve Temel Problemleri - 2",
+                "Türkiye'de Felsefi Düşünceye Katkıda Bulunan Felsefeciler - Çağımızın Felsefecileri - Yaşadıkları Yerler",
+                "Görüş Analizi: F. Nietzsche, H. Bergson, J. P. Sartre ve T. Kuhn",
+                "N. Topçu, T. Mengüşoğlu ve K. Popper'ın Görüşlerinin Tartışılması"
+            ],
+            "AYT Psikoloji": [
+                "Psikolojinin Konusu - Bir Bilim Dalı Olma Süreci",
+                "Psikolojide Yaklaşımlar - 1",
+                "Psikolojide Yaklaşımlar - 2",
+                "Psikolojinin Bilim Dalı Olarak Ölçütleri - Amaçları - Araştırmalarda Uyulması Gereken Etik Kurallar",
+                "Psikoloji Araştırmalarında Uygulanan Yöntem ve Teknikler",
+                "Psikolojinin Alt Dalları - İş Alanları - Diğer Bilim Dallarıyla İlişkisi",
+                "Davranışın Oluşum Süreci - Psikolojik Süreçler ve Biyolojik Süreçlerin İlişkisi - Kalıtım ve Çevrenin Davranışa Etkisi",
+                "Yaşam Boyu Gelişim - Gelişim Dönemleri ve Temel Özellikleri",
+                "Gelişim Kuramları",
+                "Ergenlik Dönemi, Ergenlik Döneminin Temel Özellikleri ve Bu Dönemi Etkileyen Faktörler",
+                "Duyumun Özellikleri ve Temel Duyum Bilgileri",
+                "Uyarılmanın Davranışlara Etkisi - Alışma ve Duyarlılaşma",
+                "Algılama - Algı Yanılmaları",
+                "Algıyı Etkileyen Faktörler - Duyum ve Algı Arasındaki Farklar",
+                "Güdülenmeyi Ortaya Çıkaran Faktörler - Güdülenmiş Davranışın Özellikleri - İhtiyaçlar Hiyerşarşisi",
+                "Duygu ve Duygu Türleri - Duyguların Davranışlara Etkisi",
+                "Bilinç - Dikkat - Bilinçlilik Türleri",
+                "Sosyoloji ve Sosyal Psikoloji - Sosyal Biliş ve Sosyal Etki Türleri - Davranış ve Sosyal Etkenler",
+                "Öğrenme ve Öğrenme Türleri - Koşullanma Yoluyla Öğrenme",
+                "Bilişsel Öğrenme",
+                "Öğrenmeyi Etkileyen Faktörler",
+                "Öğrenme Stratejileri ve Görevleri - Hayat Boyu Öğrenme",
+                "Bellek ve Bellek Türleri",
+                "Belleğin Temel İşlevleri - Unutmaya Sebep Olan Faktörler - Bellek Geliştirme Teknikleri",
+                "Düşünmenin Yapı Taşları - Dilin Düşünmedeki Rolü - Doğru Karar Vermede İrdelemenin Önemi",
+                "Zekâ - Kalıtım ve Çevrenin Zekâ Üzerindeki Etkileri - Zekâ Testleri",
+                "Zekâ Türleri - Zekâ ve Yaratıcılık",
+                "Kişilik ve Kişiliğin Gelişimi - Kişilik Kuramları",
+                "Bireysel Farklılıklar - Kişiliğin Ölçülmesi",
+                "Stres ve Stresin Nedenleri - Stresin Günlük Yaşama Etkileri",
+                "Stresle Başa Çıkma Yolları - Savunma Mekanizmaları",
+                "Ruh Sağlığının Önemi ve Ölçütleri - Ruh Sağlığını Korumada Denge, Empati ve Hobiler",
+                "Ruh Sağlığı Açısından Normal ve Normal Dışı Kavramları",
+                "Normal Dışı Davranışlar - Kişilik Bozuklukları - Şizofreni",
+                "Psikolojik Destek"
+            ],
+            "AYT Sosyoloji": [
+                "Sosyolojiyi Tanıyalım",
+                "Sosyolojik Düşünmenin Bireye ve Topluma Katkısı - Sosyolojinin Diğer Sosyal Bilim Dallarıyla İlişkisi",
+                "Toplum ve Toplumu Oluşturan Ögeler",
+                "Sosyolojinin Doğuşunda Etkili Olan Olaylar - Sosyolojinin Kurucuları",
+                "Sosyolojide Kullanılan Başlıca Yöntemler",
+                "Sosyolojide Kullanılan Veri Toplama Teknikleri",
+                "Türkiye'de Sosyoloji",
+                "Sosyalleşme ve Sosyalleşmeyi Etkileyen Unsurlar",
+                "Sosyalleşmenin Aşamaları ve Sosyalleşmenin Toplumsal İlişkiler Üzerindeki Etkisi",
+                "Toplumsal Statü - Toplumsal Rol -Toplumsal Saygınlık",
+                "Toplumsal Değer - Toplumsal Norm - Toplumsal Kontrol",
+                "Toplumsal Sapma ve Suç, Hak ve Görev Dengesi",
+                "Toplumsal Yapı Nedir? Toplumsal Yapıya Etki Eden Faktörler - Toplumsal Yapıyı Oluşturan Unsurlar",
+                "Toplumsal Etkileşim Tipleri",
+                "Toplumsal Tabakalaşma - Toplumsal Hareketlilik",
+                "Toplumsal Değişme ve Toplumsal Değişmeyi Etkileyen Faktörler",
+                "Toplumsal Değişme ve Kültür",
+                "Modernleşme ve Küreselleşme",
+                "Toplumsal Gelişme ve Toplumsal Gelişmenin Ögeleri -Toplumsal Bütünleşme -Toplumsal Çözülme",
+                "Kültürün Anlamı",
+                "Kültürün İşlevleri",
+                "Kültüre İlişkin Kavramlar",
+                "Toplumsal Kültürün Önemi",
+                "Kültürel Tutumlar ve Kültürler Arası Etkileşim",
+                "Kurum Kavramı ve Kurumların İşlevleri",
+                "Aile Kurumu ve Evlilik",
+                "Ailenin İşlevleri ve Aile Türleri",
+                "Eğitim Kurumu, Önemi ve İşlevleri",
+                "Din Kurumu, Önemi ve İşlevleri",
+                "Ekonomi Kurumu, Önemi ve İşlevleri",
+                "Ekonominin Toplumsal Yaşamadaki Önemi",
+                "Toplumsal Yaşamda Ekonominin Temel Ögeleri",
+                "Temel Ekonomik Sistemler",
+                "Siyaset Kurumu ve Temel Kavramları",
+                "Siyasal Yönetim Biçimleri"
+            ],
+            "AYT Mantık": [
+                "Doğru Düşünme - Temel Kavramlar",
+                "Akıl İlkeleri",
+                "Akıl Yürütme Yöntemleri",
+                "Mantığın Uygulama Alanları",
+                "Aristoteles ve Mantık - Kavram ve Terim",
+                "Nelik, Gerçeklik, Kimlik - İçlem ve Kaplam",
+                "Kavram Çeşitleri",
+                "Beş Tümel",
+                "Kavramlar Arası İlişkiler - Tanım",
+                "Önerme ve Önerme Çeşitleri",
+                "Çıkarım - Karşı Olum Çıkarımları",
+                "Eşdeğerlik Çıkarımları",
+                "Dolaylı Çıkarım - Kıyas",
+                "Kıyas Çeşitleri",
+                "Dil ve Düşünme İlişkisi - Dilin Görevleri",
+                "Bilgi Aktarma ve Dil - Anlama ve Tanımlama",
+                "Sembolik Mantığa Geçiş-Önerme ve Yapısı - Basit ve Bileşik Önermeler - Çıkarım",
+                "Sembolleştirme - Önerme Eklemleri",
+                "Yorumlama - Önermelerin Doğruluk Değerleri - Doğruluk Çizelgesi",
+                "Tutarlılık, Geçerlilik, Eşdeğerlik Denetlemesi",
+                "Çözümleyici Çizelge Kuralları",
+                "Çözümleyici Çizelge ile Tutarlılık, Geçerlilik ve Eşdeğerlik Denetlemesi",
+                "Niceleme Mantığı - Temel Kurallar - Denetlemeler",
+                "Çok Değerli Mantık"
+            ]
+        };
+
+        // Ders türleri (Sayısal/Sözel)
+        const subjectType = {
+            "TYT Matematik": "numeric",
+            "TYT Geometri": "numeric", 
+            "TYT Fizik": "numeric",
+            "TYT Kimya": "numeric",
+            "TYT Biyoloji": "numeric",
+            "TYT Türkçe": "verbal",
+            "TYT Tarih": "verbal",
+            "TYT Coğrafya": "verbal",
+            "TYT Felsefe": "verbal",
+            "TYT Din Kültürü": "verbal",
+            "AYT Edebiyat": "verbal",
+            "AYT Coğrafya": "verbal",
+            "AYT Tarih": "verbal",
+            "AYT Felsefe": "verbal",
+            "AYT Psikoloji": "verbal",
+            "AYT Sosyoloji": "verbal",
+            "AYT Mantık": "verbal"
+        };
+
+        // Haftalık konu sayılarını saklamak için global değişken
+        let weeklyTopicCounts = {};
+
+        // Sayfa yüklendiğinde dersleri ekle ve başlangıç tarihini ayarla
+        document.addEventListener('DOMContentLoaded', function() {
+            const subjectsContainer = document.getElementById('subjects-container');
+            
+            for (const [subject, topics] of Object.entries(tytSubjects)) {
+                const subjectItem = document.createElement('div');
+                subjectItem.className = 'subject-item';
+                
+                let topicsHTML = '';
+                topics.forEach(topic => {
+                    topicsHTML += `
+                        <div class="topic-item">
+                            <input type="checkbox" id="topic-${subject}-${topic.replace(/\s+/g, '-')}" 
+                                   name="topics" value="${topic}" data-subject="${subject}" checked
+                                   onchange="updateProgressBar(); updateWeeklyTopicsPanel()">
+                            <label for="topic-${subject}-${topic.replace(/\s+/g, '-')}">${topic}</label>
+                        </div>
+                    `;
+                });
+                
+                const typeColor = subjectType[subject] === 'numeric' ? '#e74c3c' : '#27ae60';
+                const typeText = subjectType[subject] === 'numeric' ? 'Sayısal' : 'Sözel';
+                
+                subjectItem.innerHTML = `
+                    <div class="subject-header">
+                        <input type="checkbox" id="subject-${subject}" name="subjects" value="${subject}" checked 
+                               onchange="toggleAllTopics('${subject}', this.checked); updateProgressBar(); updateWeeklyTopicsPanel()">
+                        <label for="subject-${subject}" style="font-weight: bold; font-size: 1.1rem;">
+                            ${subject} 
+                            <span style="color: ${typeColor}; font-size: 0.9rem;">(${typeText})</span>
+                        </label>
+                    </div>
+                    <div class="topics-container">
+                        ${topicsHTML}
+                    </div>
+                `;
+                
+                subjectsContainer.appendChild(subjectItem);
+            }
+            
+            // Bugünün tarihini başlangıç tarihi olarak ayarla
+            const today = new Date();
+            const formattedDate = formatDateForInput(today);
+            document.getElementById('start-date').value = formattedDate;
+            
+            // Haftalık konu sayıları panelini güncelle
+            updateWeeklyTopicsPanel();
+            
+            // İlk ilerleme çubuğunu güncelle
+            updateProgressBar();
+            
+            // Input değişikliklerini dinle
+            document.getElementById('daily-hours').addEventListener('change', updateWeeklyTopicsPanel);
+            document.getElementById('start-time').addEventListener('change', updateWeeklyTopicsPanel);
+            document.querySelectorAll('input[name="days"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updateWeeklyTopicsPanel);
+            });
+        });
+
+        // Tarihi HTML input için uygun formata çevir (YYYY-MM-DD)
+        function formatDateForInput(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Tarihi Türkçe formatında göster (DD.MM.YYYY)
+        function formatDateForDisplay(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}.${month}.${year}`;
+        }
+
+        // JavaScript Date objesinden Türkçe gün ismini al
+        function getTurkishDayName(date) {
+            const dayNames = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+            return dayNames[date.getDay()];
+        }
+
+        // Tüm konuları seç/çıkar
+        function toggleAllTopics(subject, isChecked) {
+            const topicCheckboxes = document.querySelectorAll(`input[name="topics"][data-subject="${subject}"]`);
+            topicCheckboxes.forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+            
+            // Haftalık konu panelini güncelle
+            updateWeeklyTopicsPanel();
+        }
+
+        // İlerleme çubuğunu güncelleme fonksiyonu
+        function updateProgressBar() {
+            const selectedSubjects = document.querySelectorAll('input[name="subjects"]:checked');
+            
+            if (selectedSubjects.length === 0) {
+                document.getElementById('progress-fill').style.width = '0%';
+                document.getElementById('progress-percentage').textContent = '0%';
+                document.getElementById('progress-stats').textContent = '0/0 konu seçildi';
+                document.getElementById('subject-progress').innerHTML = 'Hiç ders seçilmedi';
+                return;
+            }
+            
+            let totalTopics = 0;
+            let selectedTopics = 0;
+            let subjectDetails = [];
+            
+            selectedSubjects.forEach(subjectCheckbox => {
+                const subject = subjectCheckbox.value;
+                const topicCheckboxes = document.querySelectorAll(`input[name="topics"][data-subject="${subject}"]`);
+                const selectedTopicCheckboxes = document.querySelectorAll(`input[name="topics"][data-subject="${subject}"]:checked`);
+                
+                const subjectTotal = topicCheckboxes.length;
+                const subjectSelected = selectedTopicCheckboxes.length;
+                
+                totalTopics += subjectTotal;
+                selectedTopics += subjectSelected;
+                
+                if (subjectTotal > 0) {
+                    const percentage = Math.round((subjectSelected / subjectTotal) * 100);
+                    subjectDetails.push({
+                        name: subject,
+                        selected: subjectSelected,
+                        total: subjectTotal,
+                        percentage: percentage
+                    });
+                }
+            });
+            
+            const totalPercentage = totalTopics > 0 ? Math.round((selectedTopics / totalTopics) * 100) : 0;
+            
+            document.getElementById('progress-fill').style.width = `${totalPercentage}%`;
+            document.getElementById('progress-percentage').textContent = `${totalPercentage}%`;
+            document.getElementById('progress-stats').textContent = `${selectedTopics}/${totalTopics} konu seçildi`;
+            
+            let subjectProgressHTML = '';
+            subjectDetails.forEach(subject => {
+                const typeColor = subjectType[subject.name] === 'numeric' ? '#e74c3c' : '#27ae60';
+                subjectProgressHTML += `
+                    <div style="margin-bottom: 5px;">
+                        <span style="color: ${typeColor}; font-weight: bold;">${subject.name}:</span>
+                        ${subject.selected}/${subject.total} konu (%${subject.percentage})
+                    </div>
+                `;
+            });
+            
+            document.getElementById('subject-progress').innerHTML = subjectProgressHTML;
+        }
+
+        // Haftalık konu sayıları panelini güncelleme fonksiyonu
+        function updateWeeklyTopicsPanel() {
+            const container = document.getElementById('weekly-topics-container');
+            const summary = document.getElementById('weekly-summary');
+            const capacityInfo = document.getElementById('capacity-info');
+            container.innerHTML = '';
+            
+            // Haftalık kapasiteyi hesapla
+            const selectedDays = document.querySelectorAll('input[name="days"]:checked').length;
+            const dailyHours = parseInt(document.getElementById('daily-hours').value) || 0;
+            const topicsPerDay = getTopicsPerDayByHours(dailyHours);
+            const weeklyCapacity = selectedDays * topicsPerDay;
+            
+            // Kapasite bilgisini göster
+            capacityInfo.innerHTML = `
+                <strong>Haftalık Kapasite Bilgisi:</strong><br>
+                ${selectedDays} gün × ${topicsPerDay} konu/gün = <strong>${weeklyCapacity} konu/hafta</strong>
+            `;
+            
+            const selectedSubjects = document.querySelectorAll('input[name="subjects"]:checked');
+            let totalWeeklyTopics = 0;
+            
+            if (selectedSubjects.length === 0) {
+                container.innerHTML = '<p style="color: #666; text-align: center;">Lütfen önce ders seçin</p>';
+                summary.innerHTML = `Toplam haftalık konu sayısı: 0 / ${weeklyCapacity}`;
+                
+                // Seçili ders yoksa weeklyTopicCounts'ı temizle
+                weeklyTopicCounts = {};
+                return;
+            }
+            
+            // Seçili olmayan dersleri weeklyTopicCounts'tan kaldır
+            const selectedSubjectNames = Array.from(selectedSubjects).map(s => s.value);
+            for (const subject in weeklyTopicCounts) {
+                if (!selectedSubjectNames.includes(subject)) {
+                    delete weeklyTopicCounts[subject];
+                }
+            }
+            
+            selectedSubjects.forEach(subjectCheckbox => {
+                const subject = subjectCheckbox.value;
+                const typeColor = subjectType[subject] === 'numeric' ? '#e74c3c' : '#27ae60';
+                
+                // Eğer bu ders için henüz bir değer ayarlanmadıysa, varsayılan değeri 1 olarak ayarla
+                if (weeklyTopicCounts[subject] === undefined) {
+                    weeklyTopicCounts[subject] = 1;
+                }
+                
+                const subjectItem = document.createElement('div');
+                subjectItem.className = 'weekly-subject-item';
+                subjectItem.innerHTML = `
+                    <div class="weekly-subject-name" style="color: ${typeColor};">${subject}</div>
+                    <input type="number" class="weekly-subject-input" id="weekly-${subject}" 
+                           min="0" max="10" value="${weeklyTopicCounts[subject]}" 
+                           onchange="updateWeeklyTopicCount('${subject}', this.value, ${weeklyCapacity})">
+                `;
+                
+                container.appendChild(subjectItem);
+                totalWeeklyTopics += weeklyTopicCounts[subject];
+            });
+            
+            // Kapasite kontrolü
+            let summaryClass = '';
+            let summaryText = '';
+            
+            if (totalWeeklyTopics > weeklyCapacity) {
+                summaryClass = 'error-message';
+                summaryText = `⚠️ UYARI: Toplam haftalık konu sayısı (${totalWeeklyTopics}), kapasitenizi (${weeklyCapacity}) aşıyor!`;
+            } else if (totalWeeklyTopics === 0) {
+                summaryClass = 'error-message';
+                summaryText = `Toplam haftalık konu sayısı: 0 / ${weeklyCapacity}`;
+            } else {
+                summaryClass = 'success-message';
+                summaryText = `✅ Toplam haftalık konu sayısı: ${totalWeeklyTopics} / ${weeklyCapacity}`;
+            }
+            
+            summary.innerHTML = summaryText;
+            summary.className = summaryClass;
+        }
+
+        // Haftalık konu sayısını güncelleme fonksiyonu
+        function updateWeeklyTopicCount(subject, value, weeklyCapacity) {
+            const count = parseInt(value) || 0;
+            weeklyTopicCounts[subject] = count;
+            
+            // Toplamı güncelle
+            updateWeeklyTopicsPanel();
+        }
+
+        // Saate göre günlük konu sayısını belirleme fonksiyonu
+        function getTopicsPerDayByHours(dailyHours) {
+            if (dailyHours <= 2) return 1;
+            if (dailyHours <= 4) return 2;
+            if (dailyHours <= 6) return 3;
+            if (dailyHours <= 8) return 4;
+            if (dailyHours <= 10) return 5;
+            if (dailyHours <= 12) return 6;
+            return 1;
+        }
+
+        // İçeriği temizleme fonksiyonu
+        function resetForm() {
+            document.getElementById('duration-value').value = 4;
+            document.getElementById('duration-unit').value = 'weeks';
+            
+            const today = new Date();
+            const formattedDate = formatDateForInput(today);
+            document.getElementById('start-date').value = formattedDate;
+            
+            document.querySelectorAll('input[name="subjects"]').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            document.querySelectorAll('input[name="topics"]').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            
+            document.querySelectorAll('input[name="days"]').forEach(checkbox => {
+                if (['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'].includes(checkbox.value)) {
+                    checkbox.checked = true;
+                } else {
+                    checkbox.checked = false;
+                }
+            });
+            
+            document.getElementById('daily-hours').value = 4;
+            document.getElementById('start-time').value = '18:00';
+            
+            // Haftalık konu sayılarını sıfırla
+            weeklyTopicCounts = {};
+            updateWeeklyTopicsPanel();
+            
+            document.getElementById('program-table-container').innerHTML = '<p>Program ayarlarınızı yapıp "Programı Oluştur" butonuna tıklayın.</p>';
+            document.getElementById('error-message').textContent = '';
+            document.getElementById('success-message').textContent = '';
+            
+            updateProgressBar();
+        }
+
+        // Tarih hesaplama fonksiyonu - başlangıç tarihine göre haftaları oluştur
+        function calculateProgramDates(startDate, selectedDays, totalWeeks) {
+            const dates = [];
+            let currentDate = new Date(startDate);
+            
+            // Haftaları oluştur
+            for (let week = 0; week < totalWeeks; week++) {
+                const weekDates = [];
+                
+                // Her hafta için 7 günü kontrol et
+                for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+                    const currentDayName = getTurkishDayName(currentDate);
+                    
+                    // Eğer bu gün seçilen günler arasındaysa, programa ekle
+                    if (selectedDays.includes(currentDayName)) {
+                        weekDates.push({
+                            day: currentDayName,
+                            date: new Date(currentDate)
+                        });
+                    }
+                    
+                    // Bir sonraki güne geç
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                
+                // Haftayı programa ekle (eğer bu hafta için seçilen günlerde çalışma varsa)
+                if (weekDates.length > 0) {
+                    dates.push(weekDates);
+                }
+            }
+            
+            return dates;
+        }
+
+        // Program oluşturma fonksiyonu
+        function generateProgram() {
+            // Hata ve başarı mesajlarını temizle
+            document.getElementById('error-message').textContent = '';
+            document.getElementById('success-message').textContent = '';
+            
+            // Kapasite kontrolü
+            const selectedDays = document.querySelectorAll('input[name="days"]:checked').length;
+            const dailyHours = parseInt(document.getElementById('daily-hours').value) || 0;
+            const topicsPerDay = getTopicsPerDayByHours(dailyHours);
+            const weeklyCapacity = selectedDays * topicsPerDay;
+            
+            // SADECE SEÇİLİ DERSLERİN TOPLAMINI HESAPLA
+            let totalWeeklySelected = 0;
+            const selectedSubjects = document.querySelectorAll('input[name="subjects"]:checked');
+            const selectedSubjectNames = Array.from(selectedSubjects).map(s => s.value);
+            
+            for (const subject in weeklyTopicCounts) {
+                // Sadece seçili dersleri toplama dahil et
+                if (selectedSubjectNames.includes(subject)) {
+                    totalWeeklySelected += weeklyTopicCounts[subject];
+                }
+            }
+            
+            if (totalWeeklySelected > weeklyCapacity) {
+                document.getElementById('error-message').textContent = `Haftalık konu sayısı (${totalWeeklySelected}), kapasitenizi (${weeklyCapacity}) aşıyor! Lütfen ayarları düzeltin.`;
+                return;
+            }
+            
+            // Seçilen dersleri ve konuları al
+            const selectedSubjectsArray = [];
+            const selectedTopics = [];
+            
+            document.querySelectorAll('input[name="subjects"]:checked').forEach(checkbox => {
+                selectedSubjectsArray.push(checkbox.value);
+            });
+            
+            document.querySelectorAll('input[name="topics"]:checked').forEach(checkbox => {
+                selectedTopics.push({
+                    subject: checkbox.getAttribute('data-subject'),
+                    topic: checkbox.value
+                });
+            });
+            
+            // Seçilen günleri al
+            const selectedDaysArray = [];
+            document.querySelectorAll('input[name="days"]:checked').forEach(checkbox => {
+                selectedDaysArray.push(checkbox.value);
+            });
+            
+            // Başlangıç tarihini al
+            const startDateInput = document.getElementById('start-date').value;
+            const startDate = new Date(startDateInput);
+            
+            // Süre bilgisini al
+            const durationValue = parseInt(document.getElementById('duration-value').value);
+            const durationUnit = document.getElementById('duration-unit').value;
+            const totalWeeks = durationUnit === 'months' ? durationValue * 4 : durationValue;
+            
+            // Diğer ayarları al
+            const dailyHoursValue = parseInt(document.getElementById('daily-hours').value);
+            const startTime = document.getElementById('start-time').value;
+            
+            // Saate göre günlük konu sayısını belirle
+            const topicsPerDayValue = getTopicsPerDayByHours(dailyHoursValue);
+            
+            // Programı oluştur
+            let programHTML = `<h3>${getDurationText(durationValue, durationUnit)} AYT Sözel Çalışma Programı</h3>`;
+            programHTML += `<p><strong>Başlangıç Tarihi:</strong> ${formatDateForDisplay(startDate)}</p>`;
+            programHTML += `<p><strong>Günlük ${dailyHoursValue} saat çalışma:</strong> ${topicsPerDayValue} konu + soru çözümü</p>`;
+            programHTML += `<p><strong>Haftalık kapasite:</strong> ${selectedDaysArray.length} gün × ${topicsPerDayValue} konu = ${weeklyCapacity} konu</p>`;
+            programHTML += `<p><strong>Seçilen toplam konu:</strong> ${totalWeeklySelected} konu</p>`;
+            
+            if (selectedSubjectsArray.length === 0 || selectedDaysArray.length === 0) {
+                programHTML += '<p style="color: #e74c3c;">Lütfen en az bir ders ve bir gün seçin.</p>';
+                document.getElementById('error-message').textContent = 'Lütfen en az bir ders ve bir gün seçin.';
+            } else if (selectedTopics.length === 0) {
+                programHTML += '<p style="color: #e74c3c;">Lütfen en az bir konu seçin.</p>';
+                document.getElementById('error-message').textContent = 'Lütfen en az bir konu seçin.';
+            } else {
+                // Tarihleri hesapla
+                const programDates = calculateProgramDates(startDate, selectedDaysArray, totalWeeks);
+                
+                // Haftalık program oluştur ve ilerleme raporunu al
+                const programResult = createWeeklyProgram(selectedDaysArray, selectedTopics, dailyHoursValue, startTime, totalWeeks, topicsPerDayValue, programDates);
+                programHTML += programResult.html;
+                
+                // Program ilerleme raporunu ekle
+                programHTML += createProgramProgressReport(programResult.progressData, selectedTopics.length, totalWeeks);
+                
+                document.getElementById('success-message').textContent = 'Program başarıyla oluşturuldu!';
+            }
+            
+            document.getElementById('program-table-container').innerHTML = programHTML;
+        }
+
+        // Program ilerleme raporu oluşturma fonksiyonu
+        function createProgramProgressReport(progressData, totalSelectedTopics, totalWeeks) {
+            const totalTopicsAdded = progressData.totalTopicsAdded;
+            const addedPercentage = Math.round((totalTopicsAdded / totalSelectedTopics) * 100);
+            const remainingTopics = totalSelectedTopics - totalTopicsAdded;
+            
+            let reportHTML = `
+                <div class="program-progress-report">
+                    <h3>📊 Program İlerleme Raporu</h3>
+                    <div class="program-progress-stats">
+                        <div class="progress-stat-item">
+                            <div class="progress-stat-value">${totalTopicsAdded}</div>
+                            <div class="progress-stat-label">Programa Eklenen Konu</div>
+                        </div>
+                        <div class="progress-stat-item">
+                            <div class="progress-stat-value">${remainingTopics}</div>
+                            <div class="progress-stat-label">Eklenmeyen Konu</div>
+                        </div>
+                        <div class="progress-stat-item">
+                            <div class="progress-stat-value">${totalSelectedTopics}</div>
+                            <div class="progress-stat-label">Toplam Seçilen Konu</div>
+                        </div>
+                        <div class="progress-stat-item">
+                            <div class="progress-stat-value">${addedPercentage}%</div>
+                            <div class="progress-stat-label">Programa Ekleme Oranı</div>
+                        </div>
+                    </div>
+            `;
+            
+            if (addedPercentage < 100) {
+                reportHTML += `
+                    <div class="program-progress-warning">
+                        <strong>⚠️ Dikkat!</strong> Seçtiğiniz ${totalSelectedTopics} konunun sadece ${totalTopicsAdded} tanesi (${addedPercentage}%) ${totalWeeks} haftalık programa sığdı. 
+                        ${remainingTopics} konu programa eklenemedi. Program süresini artırarak tüm konuları programa ekleyebilirsiniz.
+                    </div>
+                `;
+            } else {
+                reportHTML += `
+                    <div class="program-progress-success">
+                        <strong>✅ Başarılı!</strong> Seçtiğiniz tüm konular (${totalSelectedTopics}) programa başarıyla eklendi.
+                    </div>
+                `;
+            }
+            
+            reportHTML += `
+                <div class="program-progress-details">
+                    <h4>Ders Bazlı İlerleme:</h4>
+            `;
+            
+            for (const subject in progressData.subjectProgress) {
+                const subjectData = progressData.subjectProgress[subject];
+                const percentage = subjectData.total > 0 ? Math.round((subjectData.added / subjectData.total) * 100) : 0;
+                const typeColor = subjectType[subject] === 'numeric' ? '#e74c3c' : '#27ae60';
+                
+                reportHTML += `
+                    <div class="subject-progress-item">
+                        <div class="subject-progress-name" style="color: ${typeColor};">${subject}</div>
+                        <div class="subject-progress-bar">
+                            <div class="subject-progress-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="subject-progress-stats">${subjectData.added}/${subjectData.total} (%${percentage})</div>
+                    </div>
+                `;
+            }
+            
+            reportHTML += `</div></div>`;
+            
+            return reportHTML;
+        }
+
+        function getDurationText(value, unit) {
+            if (unit === 'months') {
+                return `${value} Aylık`;
+            } else {
+                return `${value} Haftalık`;
+            }
+        }
+
+        function createWeeklyProgram(days, topics, dailyHours, startTime, totalWeeks, topicsPerDay, programDates) {
+            let programHTML = '';
+            
+            // Konuları derslere göre grupla ve sıralı konu takibi için indeksleri tut
+            const subjectsWithTopics = {};
+            const subjectProgress = {};
+            
+            topics.forEach(item => {
+                if (!subjectsWithTopics[item.subject]) {
+                    subjectsWithTopics[item.subject] = [];
+                    subjectProgress[item.subject] = {
+                        currentIndex: 0,
+                        completed: false,
+                        totalTopics: 0,
+                        addedTopics: 0,
+                        weeklyLimit: weeklyTopicCounts[item.subject] || 1,
+                        weeklyAdded: 0
+                    };
+                }
+                if (!subjectsWithTopics[item.subject].includes(item.topic)) {
+                    subjectsWithTopics[item.subject].push(item.topic);
+                    subjectProgress[item.subject].totalTopics++;
+                }
+            });
+            
+            // Her dersin konularını orijinal sırasına göre sırala
+            for (const subject in subjectsWithTopics) {
+                subjectsWithTopics[subject] = subjectsWithTopics[subject].sort((a, b) => {
+                    return tytSubjects[subject].indexOf(a) - tytSubjects[subject].indexOf(b);
+                });
+            }
+            
+            // Haftalık programı oluştur
+            for (let week = 1; week <= totalWeeks; week++) {
+                // Her hafta başında weeklyAdded değerlerini sıfırla
+                for (const subject in subjectProgress) {
+                    subjectProgress[subject].weeklyAdded = 0;
+                }
+                
+                programHTML += `<div class="week-container" data-week="${week}">`;
+                programHTML += `<h4 style="margin: 20px 0 10px 0; color: #4a6fa5; background: #e8f4fc; padding: 10px; border-radius: 5px;">${week}. Hafta - Günlük ${topicsPerDay} Konu</h4>`;
+                
+                // Haftalık ders dağılımını göster
+                let weeklyDistribution = '<p><strong>Haftalık Konu Dağılımı:</strong> ';
+                let distributionItems = [];
+                for (const subject in subjectProgress) {
+                    if (subjectProgress[subject].weeklyLimit > 0 && !subjectProgress[subject].completed) {
+                        distributionItems.push(`${subject}: ${subjectProgress[subject].weeklyLimit} konu`);
+                    }
+                }
+                weeklyDistribution += distributionItems.join(', ') + '</p>';
+                programHTML += weeklyDistribution;
+                
+                programHTML += '<table class="program-table"><thead><tr><th>Gün</th><th>Saat</th><th>Yapılacaklar</th></tr></thead><tbody>';
+                
+                // Her gün için program oluştur
+                const weekDates = programDates[week - 1] || [];
+                
+                for (let dayIndex = 0; dayIndex < weekDates.length; dayIndex++) {
+                    const dateInfo = weekDates[dayIndex];
+                    const day = dateInfo.day;
+                    const dateStr = dateInfo.date ? formatDateForDisplay(dateInfo.date) : '';
+                    
+                    programHTML += createDailyProgram(day, dateStr, subjectsWithTopics, subjectProgress, dailyHours, startTime, week, dayIndex, topicsPerDay);
+                }
+                
+                programHTML += '</tbody></table></div>';
+                
+                // Tüm konular tamamlandı mı kontrol et
+                const allCompleted = Object.values(subjectProgress).every(progress => progress.completed);
+                if (allCompleted) {
+                    programHTML += `<p style="color: #27ae60; font-weight: bold; margin-top: 20px;">✅ Tebrikler! Tüm konular ${week}. haftada tamamlandı. Kalan haftalar için genel tekrar yapabilirsiniz.</p>`;
+                    break;
+                }
+            }
+            
+            // İlerleme verilerini hazırla
+            let totalTopicsAdded = 0;
+            const subjectProgressData = {};
+            
+            for (const subject in subjectProgress) {
+                const added = subjectProgress[subject].currentIndex;
+                totalTopicsAdded += added;
+                subjectProgressData[subject] = {
+                    added: added,
+                    total: subjectProgress[subject].totalTopics
+                };
+            }
+            
+            return {
+                html: programHTML,
+                progressData: {
+                    totalTopicsAdded: totalTopicsAdded,
+                    subjectProgress: subjectProgressData
+                }
+            };
+        }
+
+        function createDailyProgram(day, dateStr, subjectsWithTopics, subjectProgress, dailyHours, startTime, week, dayIndex, topicsPerDay) {
+            let dailyHTML = '';
+            let currentTime = startTime;
+            
+            // Günlük konuları belirle - AKILLI DAĞITIM ile
+            const dailyTopics = getDailyTopicsSmartDistribution(subjectsWithTopics, subjectProgress, week, dayIndex, topicsPerDay);
+            
+            // Eğer konu kalmadıysa genel tekrar ekle
+            if (dailyTopics.length === 0) {
+                const allCompleted = Object.values(subjectProgress).every(progress => progress.completed);
+                if (allCompleted) {
+                    dailyHTML += `<tr><td>${day}${dateStr ? `<span class="date-display">${dateStr}</span>` : ''}</td><td class="time-slot">${startTime} - ${addTime(startTime, dailyHours*60)}</td><td><span class="empty-slot">Genel Tekrar / Eksik Tamamlama</span></td></tr>`;
+                } else {
+                    // Konular bitmediyse boş gün ekleme, diğer derslerden konu ekle
+                    const remainingTopics = getRemainingTopics(subjectsWithTopics, subjectProgress, topicsPerDay);
+                    if (remainingTopics.length > 0) {
+                        const topicDurations = calculateTopicDurations(remainingTopics, dailyHours * 60, topicsPerDay);
+                        
+                        remainingTopics.forEach((topic, index) => {
+                            const subjectClass = subjectType[topic.subject] === 'numeric' ? 'numeric-subject' : 'verbal-subject';
+                            const topicDuration = topicDurations[index];
+                            
+                            // Konu çalışma
+                            const studyEnd = addTime(currentTime, topicDuration.study);
+                            dailyHTML += `
+                                <tr>
+                                    ${index === 0 ? `<td rowspan="${remainingTopics.length * 3 - (remainingTopics.length > 1 ? 1 : 0)}">${day}${dateStr ? `<span class="date-display">${dateStr}</span>` : ''}</td>` : ''}
+                                    <td class="time-slot">${currentTime} - ${studyEnd}</td>
+                                    <td>
+                                        <span class="subject ${subjectClass}">${topic.subject}</span>
+                                        <span class="topic">${topic.topic} Konu Çalışma</span>
+                                    </td>
+                                </tr>
+                            `;
+                            currentTime = studyEnd;
+                            
+                            // Kısa mola
+                            const shortBreakEnd = addTime(currentTime, topicDuration.shortBreak);
+                            dailyHTML += `
+                                <tr>
+                                    <td class="time-slot">${currentTime} - ${shortBreakEnd}</td>
+                                    <td><span class="break">KISA MOLA</span></td>
+                                </tr>
+                            `;
+                            currentTime = shortBreakEnd;
+                            
+                            // Soru çözümü
+                            const questionEnd = addTime(currentTime, topicDuration.questions);
+                            dailyHTML += `
+                                <tr>
+                                    <td class="time-slot">${currentTime} - ${questionEnd}</td>
+                                    <td>
+                                        <span class="question-solving">${topic.topic} Soru Çözümü</span>
+                                        <span class="subject ${subjectClass}">${topic.subject}</span>
+                                    </td>
+                                </tr>
+                            `;
+                            currentTime = questionEnd;
+                            
+                            // Uzun mola (son dersten sonra değil)
+                            if (index < remainingTopics.length - 1) {
+                                const longBreakEnd = addTime(currentTime, topicDuration.longBreak);
+                                dailyHTML += `
+                                    <tr>
+                                        <td class="time-slot">${currentTime} - ${longBreakEnd}</td>
+                                        <td><span class="break">UZUN MOLA</span></td>
+                                    </tr>
+                                `;
+                                currentTime = longBreakEnd;
+                            }
+                        });
+                    } else {
+                        dailyHTML += `<tr><td>${day}${dateStr ? `<span class="date-display">${dateStr}</span>` : ''}</td><td class="time-slot">${startTime} - ${addTime(startTime, dailyHours*60)}</td><td><span class="empty-slot">Tüm Konular Tamamlandı - Genel Tekrar</span></td></tr>`;
+                    }
+                }
+                return dailyHTML;
+            }
+            
+            // Süre hesaplamalarını güncelle
+            const totalMinutesAvailable = dailyHours * 60;
+            
+            // Her konu için süreleri belirle
+            const topicDurations = calculateTopicDurations(dailyTopics, totalMinutesAvailable, topicsPerDay);
+            
+            // Dersleri ekle
+            let rowSpan = 0;
+            
+            dailyTopics.forEach((topic, index) => {
+                const subjectClass = subjectType[topic.subject] === 'numeric' ? 'numeric-subject' : 'verbal-subject';
+                const topicDuration = topicDurations[index];
+                
+                // Konu çalışma
+                const studyEnd = addTime(currentTime, topicDuration.study);
+                dailyHTML += `
+                    <tr>
+                        ${index === 0 ? `<td rowspan="${dailyTopics.length * 3 - (dailyTopics.length > 1 ? 1 : 0)}">${day}${dateStr ? `<span class="date-display">${dateStr}</span>` : ''}</td>` : ''}
+                        <td class="time-slot">${currentTime} - ${studyEnd}</td>
+                        <td>
+                            <span class="subject ${subjectClass}">${topic.subject}</span>
+                            <span class="topic">${topic.topic} Konu Çalışma</span>
+                        </td>
+                    </tr>
+                `;
+                rowSpan++;
+                currentTime = studyEnd;
+                
+                // Kısa mola
+                const shortBreakEnd = addTime(currentTime, topicDuration.shortBreak);
+                dailyHTML += `
+                    <tr>
+                        <td class="time-slot">${currentTime} - ${shortBreakEnd}</td>
+                        <td><span class="break">KISA MOLA</span></td>
+                    </tr>
+                `;
+                rowSpan++;
+                currentTime = shortBreakEnd;
+                
+                // Soru çözümü
+                const questionEnd = addTime(currentTime, topicDuration.questions);
+                dailyHTML += `
+                    <tr>
+                        <td class="time-slot">${currentTime} - ${questionEnd}</td>
+                        <td>
+                            <span class="question-solving">${topic.topic} Soru Çözümü</span>
+                            <span class="subject ${subjectClass}">${topic.subject}</span>
+                        </td>
+                    </tr>
+                `;
+                rowSpan++;
+                currentTime = questionEnd;
+                
+                // Uzun mola (son dersten sonra değil)
+                if (index < dailyTopics.length - 1) {
+                    const longBreakEnd = addTime(currentTime, topicDuration.longBreak);
+                    dailyHTML += `
+                        <tr>
+                            <td class="time-slot">${currentTime} - ${longBreakEnd}</td>
+                            <td><span class="break">UZUN MOLA</span></td>
+                        </tr>
+                    `;
+                    rowSpan++;
+                    currentTime = longBreakEnd;
+                }
+            });
+            
+            // Eğer günlük saat dolmadıysa boş zaman ekle
+            const totalMinutesUsed = topicDurations.reduce((total, duration) => total + duration.total, 0);
+            if (totalMinutesUsed < totalMinutesAvailable) {
+                const remainingMinutes = totalMinutesAvailable - totalMinutesUsed;
+                const freeTimeEnd = addTime(currentTime, remainingMinutes);
+                
+                dailyHTML += `
+                    <tr>
+                        <td class="time-slot">${currentTime} - ${freeTimeEnd}</td>
+                        <td><span class="empty-slot">Serbest Çalışma / Genel Tekrar</span></td>
+                    </tr>
+                `;
+            }
+            
+            return dailyHTML;
+        }
+
+        // Kalan konuları getir (biten derslerin yerine)
+        function getRemainingTopics(subjectsWithTopics, subjectProgress, maxTopics) {
+            const remainingTopics = [];
+            const subjectKeys = Object.keys(subjectsWithTopics);
+            
+            // Önce konuları bitmemiş dersleri bul
+            const availableSubjects = [];
+            
+            for (const subject of subjectKeys) {
+                const progress = subjectProgress[subject];
+                if (!progress.completed && progress.currentIndex < subjectsWithTopics[subject].length) {
+                    availableSubjects.push(subject);
+                }
+            }
+            
+            // Sayısal ve sözel dersleri ayır
+            const numericSubjects = availableSubjects.filter(subject => subjectType[subject] === 'numeric');
+            const verbalSubjects = availableSubjects.filter(subject => subjectType[subject] === 'verbal');
+            
+            // Dönüşümlü olarak sayısal ve sözel derslerden konu ekle
+            let numericIndex = 0;
+            let verbalIndex = 0;
+            
+            for (let i = 0; i < maxTopics; i++) {
+                let selectedSubject = null;
+                
+                // Çift indekslerde sayısal, tek indekslerde sözel ders seç
+                if (i % 2 === 0 && numericIndex < numericSubjects.length) {
+                    selectedSubject = numericSubjects[numericIndex];
+                    numericIndex++;
+                } else if (verbalIndex < verbalSubjects.length) {
+                    selectedSubject = verbalSubjects[verbalIndex];
+                    verbalIndex++;
+                } else if (numericIndex < numericSubjects.length) {
+                    // Eğer sözel ders kalmadıysa sayısal ders ekle
+                    selectedSubject = numericSubjects[numericIndex];
+                    numericIndex++;
+                } else {
+                    // Hiç ders kalmadıysa döngüyü bitir
+                    break;
+                }
+                
+                if (selectedSubject) {
+                    const progress = subjectProgress[selectedSubject];
+                    const topic = subjectsWithTopics[selectedSubject][progress.currentIndex];
+                    
+                    remainingTopics.push({
+                        subject: selectedSubject,
+                        topic: topic
+                    });
+                    
+                    progress.currentIndex++;
+                    progress.addedTopics++;
+                    
+                    if (progress.currentIndex >= subjectsWithTopics[selectedSubject].length) {
+                        progress.completed = true;
+                    }
+                }
+            }
+            
+            return remainingTopics;
+        }
+
+        // Günlük konuları getir - AKILLI DAĞITIM (Konuları biten derslerin yerine aynı türden dersler eklenir)
+        function getDailyTopicsSmartDistribution(subjectsWithTopics, subjectProgress, week, dayIndex, topicsPerDay) {
+            const dailyTopics = [];
+            const subjectKeys = Object.keys(subjectsWithTopics);
+            
+            // Mevcut dersleri türlerine göre ayır
+            const availableSubjects = {
+                numeric: [],
+                verbal: []
+            };
+            
+            // Dersleri türlerine göre grupla
+            for (const subject of subjectKeys) {
+                const progress = subjectProgress[subject];
+                if (!progress.completed && 
+                    progress.currentIndex < subjectsWithTopics[subject].length && 
+                    progress.weeklyAdded < progress.weeklyLimit) {
+                    
+                    availableSubjects[subjectType[subject]].push({
+                        subject: subject,
+                        progress: progress
+                    });
+                }
+            }
+            
+            // Dönüşümlü dağıtım yap (Sayısal-Sözel-Sayısal-Sözel şeklinde)
+            let lastSubjectType = null;
+            
+            for (let i = 0; i < topicsPerDay; i++) {
+                let selectedSubject = null;
+                let selectedTopic = null;
+                
+                // Eğer önceki ders sayısal ise, şimdi sözel ders seç
+                if (lastSubjectType === 'numeric' && availableSubjects.verbal.length > 0) {
+                    selectedSubject = availableSubjects.verbal[0];
+                } 
+                // Eğer önceki ders sözel ise veya ilk ders ise, sayısal ders seç
+                else if (availableSubjects.numeric.length > 0) {
+                    selectedSubject = availableSubjects.numeric[0];
+                }
+                // Eğer uygun ders bulamadıysak, diğer türden seç
+                else if (availableSubjects.verbal.length > 0) {
+                    selectedSubject = availableSubjects.verbal[0];
+                }
+                
+                // Eğer hala ders seçilemediyse, konuları bitmemiş diğer derslere bak
+                if (!selectedSubject) {
+                    selectedSubject = findAlternativeSubject(subjectsWithTopics, subjectProgress, lastSubjectType);
+                }
+                
+                if (selectedSubject) {
+                    const subjectName = selectedSubject.subject;
+                    const progress = selectedSubject.progress;
+                    const topic = subjectsWithTopics[subjectName][progress.currentIndex];
+                    
+                    dailyTopics.push({
+                        subject: subjectName,
+                        topic: topic
+                    });
+                    
+                    // Seçilen dersi ilgili listeden çıkar
+                    const subjectTypeKey = subjectType[subjectName];
+                    availableSubjects[subjectTypeKey] = availableSubjects[subjectTypeKey].filter(s => s.subject !== subjectName);
+                    
+                    // Son ders türünü kaydet
+                    lastSubjectType = subjectTypeKey;
+                    
+                    progress.currentIndex++;
+                    progress.addedTopics++;
+                    progress.weeklyAdded++;
+                    
+                    if (progress.currentIndex >= subjectsWithTopics[subjectName].length) {
+                        progress.completed = true;
+                    }
+                } else {
+                    // Eğer hiç ders kalmadıysa döngüyü bitir
+                    break;
+                }
+            }
+            
+            return dailyTopics;
+        }
+
+        // Konuları biten derslerin yerine aynı türden konuları bitmemiş ders bulma fonksiyonu
+        function findAlternativeSubject(subjectsWithTopics, subjectProgress, lastSubjectType) {
+            const subjectKeys = Object.keys(subjectsWithTopics);
+            let alternativeSubjects = [];
+            
+            // Son ders türüne göre alternatif dersleri bul
+            const targetType = lastSubjectType === 'numeric' ? 'verbal' : 'numeric';
+            
+            for (const subject of subjectKeys) {
+                const progress = subjectProgress[subject];
+                // Konuları bitmemiş ve haftalık limiti dolmamış dersleri bul
+                if (!progress.completed && 
+                    progress.currentIndex < subjectsWithTopics[subject].length && 
+                    progress.weeklyAdded < progress.weeklyLimit) {
+                    
+                    // Hedef türe uygun dersleri önceliklendir
+                    if (subjectType[subject] === targetType) {
+                        alternativeSubjects.unshift({ // Uygun türdeki dersleri öne al
+                            subject: subject,
+                            progress: progress
+                        });
+                    } else {
+                        alternativeSubjects.push({
+                            subject: subject,
+                            progress: progress
+                        });
+                    }
+                }
+            }
+            
+            // Öncelikli dersleri döndür
+            return alternativeSubjects.length > 0 ? alternativeSubjects[0] : null;
+        }
+
+        // Konu sürelerini hesapla
+        function calculateTopicDurations(dailyTopics, totalMinutesAvailable, topicsPerDay) {
+            const topicCount = dailyTopics.length;
+            let durations = [];
+            
+            // Minimum süreler (dakika cinsinden)
+            const minStudy = 20;
+            const minShortBreak = 5;
+            const minQuestions = 20;
+            const minLongBreak = 10;
+            
+            // Toplam minimum süre (konu başına)
+            const minPerTopic = minStudy + minShortBreak + minQuestions;
+            const totalMinRequired = topicCount * minPerTopic + (topicCount - 1) * minLongBreak;
+            
+            // Eğer toplam minimum süre mevcut süreden fazlaysa, süreleri ayarla
+            if (totalMinRequired > totalMinutesAvailable) {
+                // Mevcut süreyi konulara dağıt
+                const availablePerTopic = Math.floor((totalMinutesAvailable - (topicCount - 1) * minLongBreak) / topicCount);
+                
+                // Süreleri orantılı olarak dağıt
+                const studyTime = Math.floor(availablePerTopic * 0.5);
+                const questionTime = Math.floor(availablePerTopic * 0.5);
+                
+                for (let i = 0; i < topicCount; i++) {
+                    durations.push({
+                        study: Math.max(minStudy, studyTime),
+                        shortBreak: minShortBreak,
+                        questions: Math.max(minQuestions, questionTime),
+                        longBreak: (i < topicCount - 1) ? minLongBreak : 0,
+                        total: Math.max(minStudy, studyTime) + minShortBreak + Math.max(minQuestions, questionTime) + 
+                               ((i < topicCount - 1) ? minLongBreak : 0)
+                    });
+                }
+                
+                return durations;
+            }
+            
+            // Ekstra süreyi dağıt
+            const extraMinutes = totalMinutesAvailable - totalMinRequired;
+            
+            // Ekstra süreyi konu çalışma ve soru çözümü arasında dağıt
+            const extraStudy = Math.floor(extraMinutes * 0.5 / topicCount);
+            const extraQuestions = Math.floor(extraMinutes * 0.5 / topicCount);
+            
+            // Her konu için süreleri belirle
+            for (let i = 0; i < topicCount; i++) {
+                durations.push({
+                    study: minStudy + extraStudy,
+                    shortBreak: minShortBreak,
+                    questions: minQuestions + extraQuestions,
+                    longBreak: (i < topicCount - 1) ? minLongBreak : 0,
+                    total: (minStudy + extraStudy + minShortBreak + minQuestions + extraQuestions) + 
+                           ((i < topicCount - 1) ? minLongBreak : 0)
+                });
+            }
+            
+            return durations;
+        }
+
+        function addTime(time, minutesToAdd) {
+            const [hours, minutes] = time.split(':').map(Number);
+            let totalMinutes = hours * 60 + minutes + minutesToAdd;
+            let newHours = Math.floor(totalMinutes / 60) % 24;
+            let newMinutes = totalMinutes % 60;
+            return `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+        }
+
+        // Yazdırma fonksiyonu
+        function printProgram() {
+            const programElement = document.getElementById('program-table-container');
+            
+            if (!programElement || programElement.textContent.includes('Program ayarlarınızı yapıp')) {
+                document.getElementById('error-message').textContent = 'Lütfen önce bir program oluşturun!';
+                return;
+            }
+            
+            window.print();
+        }
+
+        // Siyah-Beyaz Yazdırma fonksiyonu
+        function printBWProgram() {
+            const programElement = document.getElementById('program-table-container');
+            
+            if (!programElement || programElement.textContent.includes('Program ayarlarınızı yapıp')) {
+                document.getElementById('error-message').textContent = 'Lütfen önce bir program oluşturun!';
+                return;
+            }
+            
+            optimizeForBWPrint();
+            window.print();
+        }
+
+        // Siyah-Beyaz yazdırma için optimize etme fonksiyonu
+        function optimizeForBWPrint() {
+            const style = document.createElement('style');
+            style.id = 'bw-print-styles';
+            style.innerHTML = `
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
+                    .program-panel, .program-panel * {
+                        visibility: visible;
+                    }
+                    .program-panel {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        background: white;
+                        box-shadow: none;
+                        padding: 10px;
+                        margin: 0;
+                    }
+                    .program-table {
+                        font-size: 16px;
+                        width: 100%;
+                        border: 2px solid #000 !important;
+                    }
+                    .program-table th {
+                        background: #f0f0f0 !important;
+                        color: black !important;
+                        -webkit-print-color-adjust: exact;
+                        border: 2px solid #000 !important;
+                        font-weight: bold;
+                        font-size: 18px;
+                        padding: 12px;
+                    }
+                    .program-table td {
+                        border: 1px solid #000 !important;
+                        padding: 10px;
+                        font-size: 15px;
+                    }
+                    .program-table tr {
+                        background: white !important;
+                    }
+                    .time-slot {
+                        color: black !important;
+                        font-weight: bold;
+                        font-size: 15px;
+                    }
+                    .subject, .numeric-subject, .verbal-subject, .question-solving, .break {
+                        background: #f0f0f0 !important;
+                        color: black !important;
+                        border: 1px solid #000 !important;
+                        font-weight: bold;
+                        padding: 6px 10px;
+                        font-size: 14px;
+                    }
+                    .topic {
+                        background: white !important;
+                        color: black !important;
+                        border: 1px solid #666 !important;
+                        padding: 4px 8px;
+                        font-size: 13px;
+                    }
+                    .empty-slot {
+                        color: #666 !important;
+                        font-style: italic;
+                    }
+                    button, .settings-panel, .program-notes, .progress-container, .program-progress-report {
+                        display: none !important;
+                    }
+                    .week-container {
+                        page-break-after: always;
+                        margin-bottom: 30px;
+                    }
+                    .week-container:last-child {
+                        page-break-after: avoid;
+                    }
+                    .section-title {
+                        color: black !important;
+                        border-bottom: 3px solid #000 !important;
+                        font-size: 22px;
+                        padding-bottom: 10px;
+                        margin-bottom: 20px;
+                    }
+                    h3 {
+                        color: black !important;
+                        font-size: 20px;
+                        margin-bottom: 15px;
+                    }
+                    h4 {
+                        color: black !important;
+                        background: #f0f0f0 !important;
+                        border: 2px solid #000 !important;
+                        font-size: 18px;
+                        padding: 12px;
+                        margin: 25px 0 15px 0;
+                    }
+                    p {
+                        font-size: 16px;
+                        margin-bottom: 10px;
+                    }
+                    .date-display {
+                        color: black !important;
+                        font-size: 12px;
+                    }
+                }
+            `;
+            
+            const existingStyle = document.getElementById('bw-print-styles');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+            document.head.appendChild(style);
+        }
+
+        // Basit ve etkili PDF oluşturma fonksiyonu
+        function downloadPDF() {
+            const programElement = document.getElementById('program-table-container');
+            
+            if (!programElement || programElement.textContent.includes('Program ayarlarınızı yapıp')) {
+                document.getElementById('error-message').textContent = 'Lütfen önce bir program oluşturun!';
+                return;
+            }
+            
+            document.getElementById('loading').style.display = 'block';
+            
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                // PDF başlığı
+                pdf.setFontSize(20);
+                pdf.setTextColor(74, 111, 165);
+                pdf.text('AYT Sözel Çalışma Programı', 105, 20, { align: 'center' });
+                
+                // Tarih
+                pdf.setFontSize(12);
+                pdf.setTextColor(100, 100, 100);
+                pdf.text(`Oluşturulma Tarihi: ${new Date().toLocaleDateString('tr-TR')}`, 105, 30, { align: 'center' });
+                
+                // Program içeriğini al
+                const weekContainers = document.querySelectorAll('.week-container');
+                let yPosition = 45;
+                
+                // Her haftayı PDF'e ekle
+                weekContainers.forEach((weekContainer, index) => {
+                    const weekTitle = weekContainer.querySelector('h4').textContent;
+                    const weekTable = weekContainer.querySelector('.program-table');
+                    
+                    // Hafta başlığı
+                    pdf.setFontSize(14);
+                    pdf.setTextColor(74, 111, 165);
+                    pdf.text(weekTitle, 14, yPosition);
+                    yPosition += 10;
+                    
+                    // Tablo başlıkları
+                    pdf.setFontSize(10);
+                    pdf.setTextColor(255, 255, 255);
+                    pdf.setFillColor(74, 111, 165);
+                    
+                    // Tablo başlık satırı
+                    pdf.rect(14, yPosition, 182, 8, 'F');
+                    pdf.text('Gün', 16, yPosition + 6);
+                    pdf.text('Saat', 50, yPosition + 6);
+                    pdf.text('Yapılacaklar', 90, yPosition + 6);
+                    yPosition += 10;
+                    
+                    // Tablo satırları
+                    pdf.setTextColor(0, 0, 0);
+                    const rows = weekTable.querySelectorAll('tbody tr');
+                    
+                    rows.forEach(row => {
+                        // Yeni sayfa kontrolü
+                        if (yPosition > 270) {
+                            pdf.addPage();
+                            yPosition = 20;
+                        }
+                        
+                        const cells = row.querySelectorAll('td');
+                        if (cells.length === 0) return;
+                        
+                        const dayCell = cells[0];
+                        const timeCell = cells[1];
+                        const activityCell = cells[2];
+                        
+                        // Gün
+                        pdf.text(dayCell.textContent || '', 16, yPosition + 6);
+                        
+                        // Saat
+                        if (timeCell) {
+                            pdf.text(timeCell.textContent || '', 50, yPosition + 6);
+                        }
+                        
+                        // Aktiviteler
+                        if (activityCell) {
+                            const subjects = activityCell.querySelectorAll('.subject, .topic, .question-solving, .break, .empty-slot');
+                            let activityText = '';
+                            
+                            subjects.forEach(subject => {
+                                if (subject.classList.contains('subject')) {
+                                    activityText += subject.textContent + ' ';
+                                } else if (subject.classList.contains('topic')) {
+                                    activityText += subject.textContent + ' ';
+                                } else if (subject.classList.contains('question-solving')) {
+                                    activityText += subject.textContent + ' ';
+                                } else if (subject.classList.contains('break')) {
+                                    activityText += subject.textContent + ' ';
+                                } else if (subject.classList.contains('empty-slot')) {
+                                    activityText += subject.textContent + ' ';
+                                }
+                            });
+                            
+                            // Metni satırlara böl
+                            const lines = pdf.splitTextToSize(activityText, 100);
+                            pdf.text(lines, 90, yPosition + 6);
+                        }
+                        
+                        // Arka plan rengi (alternatif satırlar)
+                        if (rows.length > 1 && Array.from(rows).indexOf(row) % 2 === 0) {
+                            pdf.setFillColor(249, 249, 249);
+                            pdf.rect(14, yPosition - 4, 182, 10, 'F');
+                        }
+                        
+                        // Alt çizgi
+                        pdf.setDrawColor(221, 221, 221);
+                        pdf.line(14, yPosition + 8, 196, yPosition + 8);
+                        
+                        yPosition += 12;
+                    });
+                    
+                    yPosition += 15;
+                });
+                
+                // PDF'i indir
+                pdf.save('AYT_Sözel_Calisma_Programi.pdf');
+                
+            } catch (error) {
+                console.error('PDF oluşturma hatası:', error);
+                document.getElementById('error-message').textContent = 'PDF oluşturulurken bir hata oluştu.';
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        // JPG olarak indirme fonksiyonu
+        function downloadJPG() {
+            const programElement = document.getElementById('program-table-container');
+            
+            if (!programElement || programElement.textContent.includes('Program ayarlarınızı yapıp')) {
+                document.getElementById('error-message').textContent = 'Lütfen önce bir program oluşturun!';
+                return;
+            }
+            
+            document.getElementById('loading').style.display = 'block';
+            
+            try {
+                const weekContainers = document.querySelectorAll('.week-container');
+                
+                if (weekContainers.length === 0) {
+                    document.getElementById('error-message').textContent = 'Program bulunamadı!';
+                    document.getElementById('loading').style.display = 'none';
+                    return;
+                }
+                
+                // A4 boyutları
+                const A4_WIDTH = 794;
+                const A4_HEIGHT = 1123;
+                
+                let currentWeekIndex = 0;
+                
+                function captureNextWeek() {
+                    if (currentWeekIndex >= weekContainers.length) {
+                        document.getElementById('loading').style.display = 'none';
+                        return;
+                    }
+                    
+                    const weekContainer = weekContainers[currentWeekIndex];
+                    const weekTitle = weekContainer.querySelector('h4').textContent;
+                    
+                    // Haftanın içeriğini A4 boyutunda bir div'e yerleştir
+                    const tempDiv = document.createElement('div');
+                    tempDiv.style.position = 'absolute';
+                    tempDiv.style.left = '-9999px';
+                    tempDiv.style.width = A4_WIDTH + 'px';
+                    tempDiv.style.padding = '40px';
+                    tempDiv.style.backgroundColor = 'white';
+                    tempDiv.style.boxShadow = '0 0 10px rgba(0,0,0,0.1)';
+                    tempDiv.style.fontFamily = 'Times New Roman, serif';
+                    
+                    // Başlık ekle
+                    const titleElement = document.createElement('h2');
+                    titleElement.textContent = 'AYT Sözel Çalışma Programı';
+                    titleElement.style.color = '#4a6fa5';
+                    titleElement.style.textAlign = 'center';
+                    titleElement.style.marginBottom = '10px';
+                    titleElement.style.fontSize = '24px';
+                    tempDiv.appendChild(titleElement);
+                    
+                    // Hafta başlığını ekle
+                    const weekTitleElement = document.createElement('h3');
+                    weekTitleElement.textContent = weekTitle;
+                    weekTitleElement.style.color = '#4a6fa5';
+                    weekTitleElement.style.marginBottom = '20px';
+                    weekTitleElement.style.borderBottom = '2px solid #6b8cbc';
+                    weekTitleElement.style.paddingBottom = '8px';
+                    weekTitleElement.style.fontSize = '18px';
+                    tempDiv.appendChild(weekTitleElement);
+                    
+                    // Hafta tablosunu ekle
+                    const tableClone = weekContainer.querySelector('.program-table').cloneNode(true);
+                    tableClone.style.width = '100%';
+                    tableClone.style.fontSize = '14px';
+                    tempDiv.appendChild(tableClone);
+                    
+                    // Tarih bilgisi ekle
+                    const dateElement = document.createElement('p');
+                    dateElement.textContent = `Oluşturulma Tarihi: ${new Date().toLocaleDateString('tr-TR')}`;
+                    dateElement.style.textAlign = 'center';
+                    dateElement.style.marginTop = '20px';
+                    dateElement.style.color = '#666';
+                    dateElement.style.fontSize = '12px';
+                    tempDiv.appendChild(dateElement);
+                    
+                    document.body.appendChild(tempDiv);
+                    
+                    html2canvas(tempDiv, {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        width: A4_WIDTH,
+                        height: tempDiv.scrollHeight,
+                        windowWidth: A4_WIDTH,
+                        windowHeight: tempDiv.scrollHeight
+                    }).then(canvas => {
+                        // Canvas'ı JPG'ye dönüştür
+                        const imgData = canvas.toDataURL('image/jpeg', 0.9);
+                        
+                        // İndirme bağlantısı oluştur
+                        const link = document.createElement('a');
+                        link.href = imgData;
+                        link.download = `AYT_Sözel_Calisma_Programi_Hafta_${currentWeekIndex + 1}.jpg`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        // Geçici div'i temizle
+                        document.body.removeChild(tempDiv);
+                        
+                        // Sonraki haftaya geç
+                        currentWeekIndex++;
+                        captureNextWeek();
+                    }).catch(error => {
+                        console.error('JPG oluşturma hatası:', error);
+                        document.getElementById('error-message').textContent = 'JPG oluşturulurken bir hata oluştu.';
+                        document.getElementById('loading').style.display = 'none';
+                        
+                        // Geçici div'i temizle
+                        if (document.body.contains(tempDiv)) {
+                            document.body.removeChild(tempDiv);
+                        }
+                    });
+                }
+                
+                // İlk haftayı yakalamaya başla
+                captureNextWeek();
+                
+            } catch (error) {
+                console.error('JPG oluşturma hatası:', error);
+                document.getElementById('error-message').textContent = 'JPG oluşturulurken bir hata oluştu.';
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+</script>
+</body>
+</html>
